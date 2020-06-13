@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth import login as auth_login, logout as auth_logout, get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
+from reviews.forms import CommentForm
+
+User = get_user_model()
 
 @require_http_methods(['GET', 'POST'])
 def signup(request):
@@ -32,13 +35,19 @@ def login(request):
     }
     return render(request, 'accounts/login.html', context)
 
-@require_POST
+@require_GET
 @login_required
 def logout(request):
     auth_logout(request)
     return redirect('accounts:login')
 
-@require_POST
+@require_GET
 @login_required
-def profile(request):
-    pass
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    comment_form = CommentForm()
+    context = {
+        'user': user,
+        'comment_form': comment_form,
+    }
+    return render(request, 'accounts/profile.html', context)
