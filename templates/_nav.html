@@ -1,0 +1,34 @@
+{% load static %}
+
+{% block nav_css %}
+  <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+{% endblock %}
+
+<nav class="navbar navbar-light bg-default custom-nav" style="height: 55px;">
+    <a class="navbar-brand" href="{% url 'home:home' %}">
+      <i class="fab fa-instagram title-logo"></i>
+      <strong class="title">Moviestagram</strong>
+    </a>
+    <form action="{% url 'movies:movie_search' %}">
+      <input id="max_searchbar_size" name="movieTitle" class="search-bar" type="text" placeholder="검색">
+    </form>
+    <ul class="nav justify-content-end">
+      <li class="nav-item">
+        <a class="nav-link pr-3" href="{% url 'home:home' %}">
+          <i class="fas fa-home menu-list"></i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link pr-3" href="#">
+          <i class="far fa-heart menu-list"></i>
+        </a>
+      </li>
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="fas fa-user-circle user-icon"></i>
+          </a>
+        </li>
+      {% endif %} 
+    </ul>
+</nav>

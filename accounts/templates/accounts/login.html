@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/accounts_form.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="login-container">
+        <strong class="form-title">
+            <p class="mt-3">Moviestagram</p>
+        </strong>
+        <form class="form-container mt-4" method="POST">
+            {% csrf_token %}
+            {% bootstrap_form form layout='inline' %}
+            <button class="btn text-white button-signup mt-3">로그인</button>
+            <div class="mt-4 text-center">
+                <span>계정이 없으신가요?</span>
+                <a class="font-weight-bold" href="{% url 'accounts:signup' %}">가입하기</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
