@@ -11,7 +11,7 @@ class ImageForm(forms.ModelForm):
         model = Image
         fields = ['image_files', ]
         
-ImageFormSet = forms.inlineformset_factory(Review, Image, form=ImageForm, extra=3)
+ImageFormSet = forms.inlineformset_factory(Review, Image, form=ImageForm, extra=3, can_delete=True, max_num=3)
 
 class CommentForm(forms.ModelForm):
     class Meta:
