@@ -1,0 +1,45 @@
+.title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 25px;
+}
+
+.title-logo {
+    font-size: 25px;
+    margin-right: 5px;
+}
+
+.menu-list {
+    font-size: 25px;
+    color: black;
+}
+
+.user-icon {
+    font-size: 25px;
+    color: lightgray;
+}
+
+.search-bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    height: 30px;
+    margin-left: -110px;
+    margin-top: -15px;
+    background-color: rgb(240, 238, 238);
+    border: lightgray;
+}
+
+@media screen and (max-width: 650px) {
+    #max_searchbar_size {
+        display: none;
+    }
+}
+
+input::placeholder {
+    text-align: center;
+}
+
+input:focus {
+    outline: none;
+}
