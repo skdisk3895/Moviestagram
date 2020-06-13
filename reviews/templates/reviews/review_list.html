@@ -54,9 +54,31 @@
                                     <div class="col-md-5" style="border-left: 0.5px solid lightgray;">
                                           <div class="card-body pb-0">
                                               <div d-flex>
-                                                  <strong style="font-size: 13px;">{{ review.author }}</strong>
-                                                  <a class="ml-1 font-weight-bold text-decoration-none" href="" style="font-size: 13px;">팔로우</a>
-                                                  <i class="fas fa-times float-right" data-dismiss="modal" style="cursor: pointer;"></i>
+                                                <strong style="font-size: 13px;">{{ review.author }}</strong>
+                                                <a class="ml-1 font-weight-bold text-decoration-none" href="" style="font-size: 13px;">팔로우</a>
+                                                <div class="float-right">
+                                                  {% if request.user == review.author %}
+                                                    <a data-toggle="modal" href="#reviewUDList{{ review.pk }}">
+                                                      <i class="fas fa-ellipsis-v mr-2 text-dark"></i>
+                                                    </a>
+                                                    <div class="modal modal-container modal" id="reviewUDList{{ review.pk }}" tabindex="-1" role="dialog">
+                                                      <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                          <ul class="list-group text-center">
+                                                              <form action="{% url 'reviews:movie_delete_review' movie.pk review.pk %}" method="POST" style="height: 50px; padding-top: 12px;">
+                                                                {% csrf_token %}
+                                                                <button class="btn btn-link text-dark text-decoration-none mt-0 pt-0">삭제하기</button>
+                                                              </form>
+                                                              <a class="text-decoration-none text-dark" href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">
+                                                                <li class="list-group-item modal-list">수정하기</li>
+                                                              </a>
+                                                          </ul>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  {% endif %}
+                                                  <i class="fas fa-times" data-dismiss="modal" style="cursor: pointer;"></i>
+                                                </div>
                                               </div>
                                           </div>
                                           <hr style="width: 100%;">
