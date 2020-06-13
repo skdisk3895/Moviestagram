@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/create_form.css' %}">
+{% endblock %}
 
 {% block body %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>제출</button>
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-5">
+            {% csrf_token %}
+            {% bootstrap_form form layout='inline' %}
+            {% bootstrap_formset image_formset %}
+            <button class="btn btn-upload font-weight-bold text-white">업로드</button>
+        </div>
     </form>
 {% endblock %}

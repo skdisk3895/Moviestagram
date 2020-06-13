@@ -14,10 +14,13 @@
       </div>
     </div>
     <hr>
-    <div>
+    <div class="container">
+      <div class="row">
         {% for review in reviews %}
-            <a data-toggle="modal" href="#reviewDetail">{{ review.content }}</a>
-            <div id="reviewDetail" class="modal" tabindex="-1" role="dialog">
+          <div class="col-4">
+            <p>{{ review.review_images.first.image_files }}</p>
+            <img src="{{ review.review_images.first.image_files }}" alt="">
+            <div id="reviewDetail" classs="modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="card mb-3" style="max-width: 540px;">
@@ -35,11 +38,8 @@
                   </div>
                 </div>
             </div>
-            <a href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">수정하기</a>
-            <form action="{% url 'reviews:movie_delete_review' movie.pk review.pk %}" method="post">
-                {% csrf_token %}
-                <button>삭제하기</button>
-            </form>
+          </div>
         {% endfor %}
+      </div>
     </div>
 {% endblock %}
