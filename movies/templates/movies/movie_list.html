@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="row">
+        {% for movie in movies %}
+            <div class="col-4 mb-4">
+                <a href="{% url 'reviews:movie_review_list' movie.pk %}">
+                    <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="200px" height="200px">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
