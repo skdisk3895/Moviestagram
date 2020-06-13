@@ -1,0 +1,47 @@
+.profile-photo {
+    color: lightgray;
+    font-size: 150px;
+    margin-right: 80px;
+}
+
+.username {
+    font-size: 30px;
+}
+
+.btn-edit {
+    margin-left: 25px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid lightgray;
+}
+
+.btn-option {
+    margin-left: 25px;
+    font-size: 30px;
+}
+
+.photo-list-title {
+    color: lightgray;
+    text-decoration: none;
+}
+
+.photo-list-title-clicked {
+    color: gray;
+    text-decoration: none;
+}
+
+.photo-list-title:hover {
+    color: gray;
+}
+
+.photo-list-title-clicked:hover {
+    color: gray;
+}
+
+.modal-container {
+    top: 25%;
+}
+
+.modal-list {
+    border-bottom: 1px solid lightgray;
+}

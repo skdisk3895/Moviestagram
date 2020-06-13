@@ -65,3 +65,8 @@ def movie_delete_review(request, movie_pk, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     review.delete()
     return redirect('reviews:movie_review_list', movie.pk)
+
+@require_GET
+@login_required
+def review_like(request, movie_pk, review_pk):
+    pass
