@@ -9,7 +9,7 @@
         <div class="ml-5">
           <p>{{ movie.title }}</p>
           <p>{{ movie.overview }}</p>
-          <a href="{% url 'reviews:movie_create_review' movie.pk %}">리뷰쓰기</a>
+          <a class="text-decoration-none" href="{% url 'reviews:movie_create_review' movie.pk %}">리뷰쓰기</a>
         </div>
       </div>
     </div>
@@ -104,9 +104,9 @@
                                           <div class="card-body py-0">
                                               <div>
                                                 {% if user in review.like_users.all %}
-                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:red;font-size: 25px;"></i>
+                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button fas fa-heart" style="color:red; font-size: 25px; cursor: pointer;"></i>
                                                 {% else %}
-                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:gray;font-size: 25px;"></i>
+                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:black; font-size: 25px; cursor: pointer;"></i>
                                                 {% endif %}
                                                   <i class="js-comment-button far fa-comment mx-2" style="font-size: 25px;"></i>
                                               </div>
@@ -144,10 +144,13 @@
                 axios.get(`/reviews/${reviewPk}/like/`)
                 .then(res => {
                     const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
+                    console.log(event)
                     if (res.data.is_liked) {
                         event.target.style.color = "red"
+                        event.target.className = "js-like-button fas fa-heart"
                     } else {
-                        event.target.style.color = "gray"
+                        event.target.style.color = "black"
+                        event.target.className = "js-like-button far fa-heart"
                     }
                     reviewLikeCount.innerText = "좋아요 " + res.data.like_count + "개"
                 })
