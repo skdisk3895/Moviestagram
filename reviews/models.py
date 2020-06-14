@@ -24,7 +24,7 @@ class Image(models.Model):
             options = {'quality': 90},)
 
 class Comment(models.Model):
-    review = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='review_comments')
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='review_comments')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='my_comments')
     opinion = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -79,7 +79,7 @@ def movie_delete_review(request, movie_pk, review_pk):
 
 @require_GET
 @login_required
-def review_like(request, review_pk):
+def review_like(request, movie_pk, review_pk):
     user = request.user
     review = get_object_or_404(Review, pk=review_pk)
     if review.like_users.filter(pk=user.pk).exists():
@@ -91,6 +91,57 @@ def review_like(request, review_pk):
 
     data = {
         'is_liked' : is_liked,
-        'like_count' : review.like_users.count()
+        'like_count' : review.like_users.count(),
+    }
+    return JsonResponse(data)
+
+@require_POST
+@login_required
+def comment_create(request, movie_pk, review_pk):
+    if request.user.is_authenticated:
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        review = get_object_or_404(Review, pk=review_pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.movie = movie
+            comment.review = review
+            comment.save()
+        data = {
+            'movie_pk' : movie_pk,
+            'review_pk' : review_pk,
+            'opinion' : comment.opinion,
+            'author' : request.user.username,
+            'date' : comment.created_at,
+            'like_users' : comment.like_users.count(),
+            'comment_pk' : comment.pk,
+        }
+        return JsonResponse(data)
+
+@require_GET
+@login_required
+def comment_delete(request, movie_pk, review_pk, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    comment.delete()
+    data = {
+    }
+    return JsonResponse(data)
+
+@require_GET
+@login_required
+def comment_like(request, movie_pk, review_pk, comment_pk):
+    user = request.user
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if comment.like_users.filter(pk=user.pk).exists():
+        comment.like_users.remove(user)
+        is_liked = False
+    else:
+        comment.like_users.add(user)
+        is_liked = True
+
+    data = {
+        'is_liked' : is_liked,
+        'like_count' : comment.like_users.count(),
     }
     return JsonResponse(data)

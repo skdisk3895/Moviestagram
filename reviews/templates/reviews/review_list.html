@@ -9,7 +9,7 @@
         <div class="ml-5">
           <p>{{ movie.title }}</p>
           <p>{{ movie.overview }}</p>
-          <a class="text-decoration-none" href="{% url 'reviews:movie_create_review' movie.pk %}">리뷰쓰기</a>
+          <a href="{% url 'reviews:movie_create_review' movie.pk %}">리뷰쓰기</a>
         </div>
       </div>
     </div>
@@ -94,9 +94,23 @@
                                                       <span style="font-size: 14px; opacity: 0.5;">{{ review.created_at }}</span>
                                                   </div>
                                               </div>
-                                              <div id="commentList">
+                                              <div id="commentList{{ review.pk }}">
                                                   {% for comment in review.review_comments.all %}
-                                                      <p>{{ comment.opinion }}</p>
+                                                    <p id="comment{{ comment.pk }}">
+                                                        <strong>{{ comment.author }}</strong> 
+                                                        <span>{{ comment.opinion }}</span>
+                                                        <br>
+                                                        {% if user in comment.like_users.all %}
+                                                        <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" class="js-comment-like-button fas fa-heart" style="color:red;font-size: 15px; cursor: pointer;"></i>
+                                                        {% else %}
+                                                        <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" class="js-comment-like-button far fa-heart" style="color:black;font-size: 15px; cursor: pointer;"></i>
+                                                        {% endif %}
+                                                        <span>{{ comment.created_at }}</span>
+                                                        <span style="font-size: 15px" id="commentLikeCount{{ comment.pk }}">좋아요 {{ comment.like_users.all|length }}개</span>
+                                                        {% if comment.author == user %}
+                                                            <span data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" class="js-comment-delete-button">댓글 삭제</span>
+                                                        {% endif %}
+                                                    </p>
                                                   {% endfor %}
                                               </div>                                              
                                           </div>
@@ -104,19 +118,19 @@
                                           <div class="card-body py-0">
                                               <div>
                                                 {% if user in review.like_users.all %}
-                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button fas fa-heart" style="color:red; font-size: 25px; cursor: pointer;"></i>
+                                                    <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button fas fa-heart" style="color:red;font-size: 25px; cursor: pointer;"></i>
                                                 {% else %}
-                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:black; font-size: 25px; cursor: pointer;"></i>
+                                                    <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:black;font-size: 25px; cursor: pointer;"></i>
                                                 {% endif %}
-                                                  <i class="js-comment-button far fa-comment mx-2" style="font-size: 25px;"></i>
+                                                  <i data-review_pk="{{ review.pk }}" class="js-comment-button far fa-comment mx-2" style="font-size: 25px;"></i>
                                               </div>
                                               <div class="mb-2">
                                                   <strong style="font-size: 15px" id="reviewLikeCount{{ review.pk }}">좋아요 {{ review.like_users.all|length }}개</strong>
                                               </div>
                                           </div>
-                                          <form class="input-group" action="" method="POST">
+                                          <form class="comment-form input-group" action="{% url 'reviews:comment_create' movie.pk review.pk %}" method="POST">
                                               {% csrf_token %}
-                                              <input type="text" class="form-control" placeholder="댓글달기" aria-label="Recipient's username">
+                                              <input type="text" id="opinion{{ review.pk }}" class="opinion form-control" name="opinion" placeholder="댓글달기" aria-label="Recipient's username">
                                               <div class="input-group-append">
                                                   <button class="btn btn-default" style="margin-bottom: 16px; color: skyblue;">게시</button>
                                               </div>
@@ -135,16 +149,16 @@
   {% block script %}
   
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script>
+    <script> // 리뷰 좋아요 기능 비동기 구현
         const buttons = document.querySelectorAll('.js-like-button')
 
         buttons.forEach(function(button) {
             button.addEventListener('click', function(event) {
+                const moviePk = event.target.dataset.movie_pk
                 const reviewPk = event.target.dataset.review_pk
-                axios.get(`/reviews/${reviewPk}/like/`)
+                axios.get(`/reviews/${moviePk}/${reviewPk}/like/`)
                 .then(res => {
                     const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
-                    console.log(event)
                     if (res.data.is_liked) {
                         event.target.style.color = "red"
                         event.target.className = "js-like-button fas fa-heart"
@@ -156,12 +170,87 @@
                 })
             })
         })
+        </script>
 
-        const comment_button = document.querySelector(`.js-comment-button`)
-        comment_button.addEventListener('click', function(event) {
-            document.querySelector(`.form-control`).focus()
+<script> // 댓글 아이콘 커서 위치 이동 구현
+        const commentButtons = document.querySelectorAll(`.js-comment-button`)
+        commentButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const reviewPk = event.target.dataset.review_pk
+                document.querySelector(`#opinion${reviewPk}`).focus()
+        })
         })
     </script>
+
+    <script> // 댓글 생성 기능 비동기 구현
+        const commentForms = document.querySelectorAll('.comment-form')
+        commentForms.forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault()
+                
+                const data = new FormData(event.target)
+
+                axios.post(event.target.action, data)
+                .then(function(response){
+                    const comment = response.data
+                    const commentList = document.querySelector(
+                        `#commentList${comment.review_pk}`)
+                    const newComment = `<p>
+                                        <strong>${comment.author}</strong> 
+                                        <span>${comment.opinion}</span>
+                                        <br>
+                                        <i data-movie_pk="${comment.movie_pk}" data-review_pk="${comment.review_pk}" data-comment_pk="${comment.comment_pk}" class="js-comment-like-button far fa-heart" style="color:gray;font-size: 15px;"></i>
+                                        <span>${comment.date}</span>
+                                        <span style="font-size: 15px" id="commentLikeCount${comment.comment_pk}">좋아요 ${comment.like_users}개</span>
+                                            <a href="/reviews/${comment.movie_pk}/${comment.review_pk}/${comment.comment_pk}/delete/">댓글 삭제</a>
+                                        </p>`
+                    commentList.insertAdjacentHTML('beforeEnd', newComment)
+                    event.target.reset()
+                })
+
+            })
+        })
+    </script>
+    <script> //댓글 삭제 기능 비동기 구현
+        const commentDeleteButtons = document.querySelectorAll('.js-comment-delete-button')
+        commentDeleteButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault()
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                const commentPk = event.target.dataset.comment_pk
+                const comment = document.querySelector(`#comment${commentPk}`)
+                axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/delete/`)
+                .then(
+                    comment.style.display = "none"
+                    )
+                })
+            })
+            </script>
+    <script> // 댓글 좋아요 기능 비동기 구현
+        const commentLikeButtons = document.querySelectorAll('.js-comment-like-button')
+        
+        commentLikeButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                const commentPk = event.target.dataset.comment_pk
+                axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/like/`)
+                .then(res => {
+                    const commentLikeCount = document.querySelector(`#commentLikeCount${commentPk}`)
+                    if (res.data.is_liked) {
+                        event.target.style.color = "red"
+                        event.target.className = "js-comment-like-button fas fa-heart"
+                    } else {
+                        event.target.style.color = "black"
+                        event.target.className = "js-comment-like-button far fa-heart"
+                    }
+                    commentLikeCount.innerText = "좋아요 " + res.data.like_count + "개"
+                })
+            })
+        })
+        </script>
+
 {% endblock %}
 <!-- 
 {% load static %}
