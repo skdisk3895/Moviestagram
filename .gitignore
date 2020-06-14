@@ -1,5 +1,10 @@
-# Created by https://www.toptal.com/developers/gitignore/api/python,django,venv
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,django,venv
+
+# Created by https://www.gitignore.io/api/venv
+# Edit at https://www.gitignore.io/?templates=venv
+
+
+# Created by https://www.gitignore.io/api/venv,django,python
+# Edit at https://www.gitignore.io/?templates=venv,django,python
 
 ### Django ###
 *.log
@@ -64,18 +69,11 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py,cover
 .hypothesis/
 .pytest_cache/
 
 # Translations
 *.mo
-
-# Django stuff:
-
-# Flask stuff:
-instance/
-.webassets-cache
 
 # Scrapy stuff:
 .scrapy
@@ -85,13 +83,6 @@ docs/_build/
 
 # PyBuilder
 target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
 
 # pyenv
 .python-version
@@ -103,24 +94,11 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
-# Celery stuff
+# celery beat schedule file
 celerybeat-schedule
-celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
 
 # Spyder project settings
 .spyderproject
@@ -128,6 +106,11 @@ venv.bak/
 
 # Rope project settings
 .ropeproject
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
 
 # mkdocs documentation
 /site
@@ -139,9 +122,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# pytype static type analyzer
-.pytype/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -160,19 +140,11 @@ dmypy.json
 
 # Translations
 
-# Django stuff:
-
-# Flask stuff:
-
 # Scrapy stuff:
 
 # Sphinx documentation
 
 # PyBuilder
-
-# Jupyter Notebook
-
-# IPython
 
 # pyenv
 
@@ -182,17 +154,15 @@ dmypy.json
 #   having no cross-platform support, pipenv may install dependencies that don't work, or not
 #   install all needed dependencies.
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-
-# Celery stuff
+# celery beat schedule file
 
 # SageMath parsed files
-
-# Environments
 
 # Spyder project settings
 
 # Rope project settings
+
+# Mr Developer
 
 # mkdocs documentation
 
@@ -200,16 +170,20 @@ dmypy.json
 
 # Pyre type checker
 
-# pytype static type analyzer
-
 ### venv ###
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
-[Bb]in
-[Ii]nclude
-[Ll]ib
-[Ll]ib64
-[Ll]ocal
-[Ss]cripts
 pyvenv.cfg
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 pip-selfcheck.json
+
+# End of https://www.gitignore.io/api/venv,django,python
+
+settings.json
+.vscode
