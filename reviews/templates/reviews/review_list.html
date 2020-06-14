@@ -9,7 +9,7 @@
         <div class="ml-5">
           <p>{{ movie.title }}</p>
           <p>{{ movie.overview }}</p>
-          <a href="{% url 'reviews:movie_create_review' movie.pk %}">리뷰쓰기</a>
+          <a class="text-decoration-none" href="{% url 'reviews:movie_create_review' movie.pk %}">리뷰쓰기</a>
         </div>
       </div>
     </div>
