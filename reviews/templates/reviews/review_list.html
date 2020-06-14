@@ -103,11 +103,15 @@
                                           <hr style="width: 100%;">
                                           <div class="card-body py-0">
                                               <div>
-                                                  <i class="far fa-heart" style="font-size: 25px;"></i>
+                                                {% if user in review.like_users.all %}
+                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:red;font-size: 25px;"></i>
+                                                {% else %}
+                                                    <i data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:gray;font-size: 25px;"></i>
+                                                {% endif %}
                                                   <i class="far fa-comment mx-2" style="font-size: 25px;"></i>
                                               </div>
                                               <div class="mb-2">
-                                                  <strong style="font-size: 15px">좋아요 2132131개</strong>
+                                                  <strong style="font-size: 15px" id="reviewLikeCount{{ review.pk }}">좋아요 {{ review.like_users.all|length }}개</strong>
                                               </div>
                                           </div>
                                           <form class="input-group" action="" method="POST">
@@ -127,4 +131,33 @@
           {% endfor %}
       </div>
   </div>
+  {% endblock %}
+  {% block script %}
+  
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const buttons = document.querySelectorAll('.js-like-button')
+
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const reviewPk = event.target.dataset.review_pk
+                axios.get(`/reviews/${reviewPk}/like/`)
+                .then(res => {
+                    const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
+                    if (res.data.is_liked) {
+                        event.target.style.color = "red"
+                    } else {
+                        event.target.style.color = "black"
+                    }
+                    reviewLikeCount.innerText = "좋아요 " + res.data.like_count + "개"
+                })
+            })
+        })
+    </script>
 {% endblock %}
+<!-- 
+{% load static %}
+
+{% block js %}
+    <link rel="stylesheet" href="{% static 'js/review_like.js' %}">
+{% endblock %} -->

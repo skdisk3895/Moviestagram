@@ -5,6 +5,7 @@ from django.db import transaction
 from movies.models import Movie
 from .models import Review, Comment, Image
 from .forms import ReviewForm, CommentForm, ImageFormSet
+from django.http import JsonResponse
 
 @require_GET
 @login_required
@@ -78,5 +79,18 @@ def movie_delete_review(request, movie_pk, review_pk):
 
 @require_GET
 @login_required
-def review_like(request, movie_pk, review_pk):
-    pass
+def review_like(request, review_pk):
+    user = request.user
+    review = get_object_or_404(Review, pk=review_pk)
+    if review.like_users.filter(pk=user.pk).exists():
+        review.like_users.remove(user)
+        is_liked = False
+    else:
+        review.like_users.add(user)
+        is_liked = True
+
+    data = {
+        'is_liked' : is_liked,
+        'like_count' : review.like_users.count()
+    }
+    return JsonResponse(data)
