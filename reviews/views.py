@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST, require_http_methods 
+from django.http import JsonResponse
 from django.db import transaction
 from movies.models import Movie
 from .models import Review, Comment, Image
 from .forms import ReviewForm, CommentForm, ImageFormSet
-from django.http import JsonResponse
 
 @require_GET
 @login_required
@@ -143,5 +143,23 @@ def comment_like(request, movie_pk, review_pk, comment_pk):
     data = {
         'is_liked' : is_liked,
         'like_count' : comment.like_users.count(),
+    }
+    return JsonResponse(data)
+
+@require_GET
+@login_required
+def movie_like(request, movie_pk):
+    user = request.user
+    movie = get_object_or_404(Movie, pk=movie_pk)
+    if movie.like_users.filter(pk=user.pk).exists():
+        movie.like_users.remove(user)
+        is_liked = False
+    else:
+        movie.like_users.add(user)
+        is_liked = True
+
+    data = {
+        'is_liked' : is_liked,
+        'like_count' : movie.like_users.count(),
     }
     return JsonResponse(data)

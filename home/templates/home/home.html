@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <h1>Home</h1>
+    <div class="row">
+        <div class="col-8">
+            <div>
+                {% for movie in movies.all %}
+                    <p>{{ movie.title }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-4">
+            <div>
+                <h1>Movie Area</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

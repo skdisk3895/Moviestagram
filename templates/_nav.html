@@ -18,10 +18,18 @@
           <i class="fas fa-home menu-list"></i>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link pr-3" href="#">
+      <li class="nav-item dropdown">
+        <a class="nav-link pr-3 dropdown-toggle" data-display="static" data-toggle="dropdown" href="#">
           <i class="far fa-heart menu-list"></i>
         </a>
+        <div class="dropdown-menu dropdown-menu-right" style="width: 300px;">
+          {% for movie in request.user.like_movies.all %}
+            <div class="mb-2">
+              <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
+              <a href="#">{{ movie.title }}</a>
+            </div>
+          {% endfor %}
+        </div>
       </li>
       {% if request.user.is_authenticated %}
         <li class="nav-item">
