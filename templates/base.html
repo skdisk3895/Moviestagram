@@ -46,7 +46,7 @@
     <script>
         const movieLikeCancelButtons = document.querySelectorAll('.movieLikeCancelButton')
         movieLikeCancelButtons.forEach(function (button) {
-            movieLikeCancelButton.addEventListener('click', function (event) {
+            button.addEventListener('click', function (event) {
                 const moviePk = event.target.dataset
                 const movie = document.querySelector(`#movieTitle${moviePk}`)
                 console.log(movie)
