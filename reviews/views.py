@@ -4,7 +4,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from django.http import JsonResponse
 from django.db import transaction
 from movies.models import Movie
-from .models import Review, Comment, Image
+from .models import Review, Comment, Image, Feed
 from .forms import ReviewForm, CommentForm, ImageFormSet
 
 @require_GET
@@ -151,11 +151,17 @@ def comment_like(request, movie_pk, review_pk, comment_pk):
 def movie_like(request, movie_pk):
     user = request.user
     movie = get_object_or_404(Movie, pk=movie_pk)
+    reviews = movie.movie_reviews.all()
     if movie.like_users.filter(pk=user.pk).exists():
         movie.like_users.remove(user)
+        for review in reviews:
+            Feed.object.filter(user__pk=user.pk, review__pk=review.pk).delete()
         is_liked = False
     else:
         movie.like_users.add(user)
+        for review in reviews:
+            feed_instance = Feed(user=user, review=review)
+            feed_instance.save()
         is_liked = True
 
     data = {
