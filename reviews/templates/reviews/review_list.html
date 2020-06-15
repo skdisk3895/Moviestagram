@@ -184,9 +184,8 @@
                 })
             })
         })
-        </script>
-
-<script> // 댓글 아이콘 커서 위치 이동 구현
+        
+        // 댓글 아이콘 커서 위치 이동 구현
         const commentButtons = document.querySelectorAll(`.js-comment-button`)
         commentButtons.forEach(function(button) {
             button.addEventListener('click', function(event) {
@@ -194,9 +193,8 @@
                 document.querySelector(`#opinion${reviewPk}`).focus()
         })
         })
-    </script>
-
-    <script> // 댓글 생성 기능 비동기 구현
+    
+    // 댓글 생성 기능 비동기 구현
         const commentForms = document.querySelectorAll('.comment-form')
         commentForms.forEach(function(form) {
             form.addEventListener('submit', function(event) {
@@ -246,12 +244,7 @@
                     commentList.insertAdjacentHTML('beforeEnd', newComment)
                     event.target.reset()
                     console.log(event)
-                })
-
-            })
-        })
-    </script>
-    <script> //댓글 삭제 기능 비동기 구현
+                    //댓글 삭제 기능 비동기 구현
         const commentDeleteButtons = document.querySelectorAll('.js-comment-delete-button')
         commentDeleteButtons.forEach(function(button) {
             button.addEventListener('click', function(event) {
@@ -267,8 +260,52 @@
                     )
                 })
             })
-    </script>
-    <script> // 댓글 좋아요 기능 비동기 구현
+    
+    // 댓글 좋아요 기능 비동기 구현
+        const commentLikeButtons = document.querySelectorAll('.js-comment-like-button')
+        
+        commentLikeButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                const commentPk = event.target.dataset.comment_pk
+                axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/like/`)
+                .then(res => {
+                    const commentLikeCount = document.querySelector(`#commentLikeCount${commentPk}`)
+                    if (res.data.is_liked) {
+                        event.target.style.color = "red"
+                        event.target.className = "js-comment-like-button fas fa-heart"
+                    } else {
+                        event.target.style.color = "black"
+                        event.target.className = "js-comment-like-button far fa-heart"
+                    }
+                    commentLikeCount.innerText = "좋아요 " + res.data.like_count + "개"
+                })
+            })
+        })
+                })
+
+            })
+        })
+    
+    //댓글 삭제 기능 비동기 구현
+        const commentDeleteButtons = document.querySelectorAll('.js-comment-delete-button')
+        commentDeleteButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault()
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                const commentPk = event.target.dataset.comment_pk
+                const comment = document.querySelector(`#comment${commentPk}`)
+                console.log(comment)
+                axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/delete/`)
+                .then(
+                    comment.style.display = "none"
+                    )
+                })
+            })
+    
+    // 댓글 좋아요 기능 비동기 구현
         const commentLikeButtons = document.querySelectorAll('.js-comment-like-button')
         
         commentLikeButtons.forEach(function(button) {
