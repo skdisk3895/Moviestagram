@@ -47,3 +47,7 @@ input:focus {
 .dropdown-toggle::after {
     display:none;
 }
+
+a:link {
+    text-decoration: none;
+}

@@ -151,6 +151,8 @@ def comment_like(request, movie_pk, review_pk, comment_pk):
 def movie_like(request, movie_pk):
     user = request.user
     movie = get_object_or_404(Movie, pk=movie_pk)
+    for review in movie.movie_reviews.all():
+        print(review.content)
     if movie.like_users.filter(pk=user.pk).exists():
         movie.like_users.remove(user)
         is_liked = False
