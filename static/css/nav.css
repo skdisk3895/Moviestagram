@@ -43,3 +43,7 @@ input::placeholder {
 input:focus {
     outline: none;
 }
+
+.dropdown-toggle::after {
+    display:none;
+}

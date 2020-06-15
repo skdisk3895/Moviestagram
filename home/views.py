@@ -5,4 +5,8 @@ from django.views.decorators.http import require_GET
 @require_GET
 @login_required
 def home(request):
-    return render(request, 'home/home.html')
+    movies = request.user.like_movies.values('title')
+    context = {
+        'movies': movies,
+    }
+    return render(request, 'home/home.html', context)
