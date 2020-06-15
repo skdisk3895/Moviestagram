@@ -16,7 +16,6 @@
                 <div>
                     <div class="d-flex">
                         <p class="username">{{ user.username }}</p>
-                        <button class="btn btn-light btn-edit">프로필 편집</button>
                         <a data-toggle="modal" class="text-dark" href="#optionModal">
                             <i class="far fa-circle btn-option mt-2"></i>
                         </a>
@@ -24,6 +23,9 @@
                             <div class="modal-dialog">
                               <div class="modal-content">
                                 <ul class="list-group text-center">
+                                    <a class="text-decoration-none text-dark" href="{% url 'accounts:update' %}">
+                                        <li class="list-group-item modal-list">비밀번호 변경</li>
+                                    </a>
                                     <a class="text-decoration-none text-dark" href="{% url 'accounts:logout' %}">
                                         <li class="list-group-item modal-list">로그아웃</li>
                                     </a>

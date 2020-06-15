@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, logout as auth_logout, get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from reviews.forms import CommentForm
@@ -51,3 +51,17 @@ def profile(request, username):
         'comment_form': comment_form,
     }
     return render(request, 'accounts/profile.html', context)
+
+def update(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            username = request.user.username
+            return redirect('accounts:profile', username)
+    else:
+        form = PasswordChangeForm(request.POST)
+    context = {
+        'form' : form
+    }
+    return render(request, 'accounts/update.html', context)

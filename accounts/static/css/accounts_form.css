@@ -20,6 +20,22 @@
     border: 2px solid lightgray;
 }
 
+.button-update {
+    width: 100%;
+    background-color: rgb(148, 213, 238);
+}
+
+.update-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 350px;
+    height: 450px;
+    margin-left: -175px;
+    margin-top: -225px;
+    border: 2px solid lightgray;
+}
+
 .form-container {
     padding-left: 30px;
     padding-right: 30px;
