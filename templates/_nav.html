@@ -22,13 +22,18 @@
         <a class="nav-link pr-3 dropdown-toggle" data-display="static" data-toggle="dropdown" href="#">
           <i class="far fa-heart menu-list"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-right" style="width: 300px;">
-          {% for movie in request.user.like_movies.all %}
-            <div class="mb-2">
-              <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
-              <a href="#">{{ movie.title }}</a>
-            </div>
-          {% endfor %}
+        <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px;">
+          <ul class="list-group">
+            {% for movie in request.user.like_movies.all %}
+              <li id="movieTitle{{ movie.pk }}" class="list-group-item" aria-disabled="true">
+                <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
+                <span>{{ movie.title }}</span>
+                <div class="float-right mt-3">
+                  <button data-movie_pk="{{ movie.pk }}" class="movieLikeCancelButton btn btn-danger" style="font-size: 10px;">좋아요 취소</a>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
       </li>
       {% if request.user.is_authenticated %}
