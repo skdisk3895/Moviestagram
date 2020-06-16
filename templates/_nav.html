@@ -22,7 +22,7 @@
         <a class="nav-link pr-3 dropdown-toggle" data-display="static" data-toggle="dropdown" href="#">
           <i class="far fa-heart menu-list"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px; z-index: 2;">
+        <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px;">
           <ul class="list-group">
             {% for movie in request.user.like_movies.all %}
               <li id="movieTitle{{ movie.pk }}" class="list-group-item">

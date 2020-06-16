@@ -30,7 +30,7 @@
     border: lightgray;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 768px) {
     #max_searchbar_size {
         display: none;
     }

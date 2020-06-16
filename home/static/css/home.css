@@ -1,3 +1,33 @@
 .card-body::-webkit-scrollbar {
     display: none !important; /* Chrome, Safari, Opera*/
 }
+
+.custom-list-group {
+    padding-left: 0;
+    overflow-y: scroll;
+    height: 450px;
+}
+
+.custom-list-group::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera*/
+}
+
+.list-group-item {
+    cursor: pointer;
+}
+
+.list-group-item:hover {
+    background-color: rgb(241, 241, 241);
+}
+
+@media screen and (max-width: 925px) {
+    #movieTitle {
+        display: none;
+    }
+
+    #moviePoster {
+        width: 120px;
+        height: 120px;
+        margin-left: 20px;
+    }
+}

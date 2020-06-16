@@ -8,11 +8,11 @@
 
 {% block body %}
     <div style="margin-bottom: 30px;">
-      <div class="d-flex">
-        <div>
+      <div class="row">
+        <div id="moviePoster" class="col-lg-3 mt-3">
           <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="250px" height="280px">
         </div>
-        <div class="ml-5">
+        <div id="movieDetail" class="ml-5 col-lg-8">
           <div class="mb-4">
             <h2>{{ movie.title }}</h2>
           </div>
@@ -73,18 +73,15 @@
                                     <div class="col-md-5" style="border-left: 0.5px solid lightgray;">
                                           <div class="card-body pb-0">
                                               <div class="d-flex">
-                                                <div class="fa-stack">
+                                                <div>
                                                     {% if review.author.my_reviews.count < 5 %}
-                                                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                                                        <i class="fa-stack-1x font-weight-bold" style="color: gray;">{{ review.author.my_reviews.count }}</i>
+                                                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
                                                     {% endif %}
                                                     {% if review.author.my_reviews.count >= 5 and review.author.my_reviews.count < 10 %}
-                                                        <i class="far fa-circle fa-stack-1x" style="color: slategray; font-size: 30px;"></i>
-                                                        <i class="fa-stack-1x font-weight-bold" style="color: gold; font-size: 15px;">{{ review.author.my_reviews.count }}</i>
+                                                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
                                                     {% endif %}
                                                     {% if review.author.my_reviews.count >= 10 %}
-                                                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                                                        <i class="fa-stack-1x font-weight-bold" style="color: springgreen;">{{ review.author.my_reviews.count }}</i>
+                                                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
                                                     {% endif %}
                                                 </div>
                                                 <div class="ml-2">
@@ -118,18 +115,15 @@
                                           <hr style="width: 100%;">
                                           <div class="card-body pt-1" style="height: 300px; overflow-y: scroll;">
                                               <div class="d-flex mb-4">
-                                                    <div class="fa-stack">
+                                                    <div>
                                                         {% if review.author.my_reviews.count < 5 %}
-                                                            <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                                                            <i class="fa-stack-1x font-weight-bold" style="color: gray;">{{ review.author.my_reviews.count }}</i>
+                                                            <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
                                                         {% endif %}
                                                         {% if review.author.my_reviews.count >= 5 and review.author.my_reviews.count < 10 %}
-                                                            <i class="far fa-circle fa-stack-1x" style="color: slategray; font-size: 30px;"></i>
-                                                            <i class="fa-stack-1x font-weight-bold" style="color: gold; font-size: 15px;">{{ review.author.my_reviews.count }}</i>
+                                                            <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
                                                         {% endif %}
                                                         {% if review.author.my_reviews.count >= 10 %}
-                                                            <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                                                            <i class="fa-stack-1x font-weight-bold" style="color: springgreen;">{{ review.author.my_reviews.count }}</i>
+                                                            <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
                                                         {% endif %}
                                                     </div>
                                                   <div class="ml-2">
@@ -165,18 +159,15 @@
                                                   {% for comment in review.review_comments.all %}
                                                     <div id="comment{{ comment.pk }}">
                                                         <div class="d-flex">
-                                                            <div class="fa-stack">
+                                                            <div>
                                                                 {% if comment.author.my_reviews.count < 5 %}
-                                                                    <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                                                                    <i class="fa-stack-1x font-weight-bold" style="color: gray;">{{ comment.author.my_reviews.count }}</i>
+                                                                    <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
                                                                 {% endif %}
-                                                                {% if comment.author.my_reviews.count >= 5 and review.author.my_reviews.count < 10 %}
-                                                                    <i class="far fa-circle fa-stack-1x" style="color: slategray; font-size: 30px;"></i>
-                                                                    <i class="fa-stack-1x font-weight-bold" style="color: gold; font-size: 15px;">{{ comment.author.my_reviews.count }}</i>
+                                                                {% if comment.author.my_reviews.count >= 5 and comment.author.my_reviews.count < 10 %}
+                                                                    <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
                                                                 {% endif %}
                                                                 {% if comment.author.my_reviews.count >= 10 %}
-                                                                    <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                                                                    <i class="fa-stack-1x font-weight-bold" style="color: springgreen;">{{ comment.author.my_reviews.count }}</i>
+                                                                    <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
                                                                 {% endif %}
                                                             </div>
                                                             <div class="ml-2">
