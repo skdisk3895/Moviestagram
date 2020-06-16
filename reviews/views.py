@@ -12,11 +12,20 @@ from .forms import ReviewForm, CommentForm, ImageFormSet
 def movie_review_list(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     reviews = movie.movie_reviews.all()
+    score_cnt = movie.movie_reviews.count()
+    score_sum = 0
+    for review in reviews:
+        score_sum += review.score
+    if score_sum == 0:
+        avg_score = 0
+    else:
+        avg_score = round(score_sum / score_cnt, 2)
     form = CommentForm()
     context = {
         'reviews': reviews,
         'movie': movie,
         'form': form,
+        'avg_score': avg_score
     }
     return render(request, 'reviews/review_list.html', context)
 
@@ -27,10 +36,13 @@ def movie_create_review(request, movie_pk):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         image_formset = ImageFormSet(request.POST, request.FILES)
+        rating = request.POST.get('star-input')
+        movie = Movie.objects.get(pk=movie_pk)
         if form.is_valid() and image_formset.is_valid():
             review = form.save(commit=False)
             review.author = request.user
             review.movie = movie
+            review.score = rating
             with transaction.atomic():
                 review.save()
                 image_formset.instance = review
