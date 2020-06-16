@@ -12,6 +12,7 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_reviews')
     like_movie_reviews_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_movie_reviews') 
+    score = models.IntegerField()
 
 def image_path(instance, filename):
     return f'reviews/{instance.review.content}/{filename}'
