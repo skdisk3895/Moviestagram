@@ -86,32 +86,33 @@
         </div>
         <div class="col-4 fixed-top" style="top: 100px; left: 65%; z-index: 1;">
             <div class="d-flex mb-5">
-                <div class="fa-stack fa-lg">
+                <div>
                     {% if request.user.my_reviews.count < 5 %}
-                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                        <i class="fa-stack-2x font-weight-bold" style="color: gray;">{{ request.user.my_reviews.count }}</i>
+                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="55px">
                     {% endif %}
                     {% if request.user.my_reviews.count >= 5 and request.user.my_reviews.count < 10 %}
-                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                        <i class="fa-stack-1x font-weight-bold" style="color: gold;">{{ request.user.my_reviews.count }}</i>
+                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="55px">
                     {% endif %}
                     {% if request.user.my_reviews.count >= 10 %}
-                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
-                        <i class="fa-stack-1x font-weight-bold" style="color: springgreen;">{{ request.user.my_reviews.count }}</i>
+                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="55px">
                     {% endif %}
                 </div>
-                <div class="ml-2 mt-2">
+                <div class="ml-2 mt-3">
                     <strong style="font-size: 17px;">{{ request.user }}</strong>
                 </div>
             </div>
             <div>
                 <strong style="opacity: 0.8;">회원님을 위한 추천 영화</strong>
-                {% for movie in recommendations %}
-              <li id="movieTitle{{ movie.pk }}" class="list-group-item">
-                <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px" class="mr-4">
-                <span><a href={% url 'reviews:movie_review_list' movie.pk %}>#{{ movie.title }}</a></span>
-              </li>
-            {% endfor %}
+                <ul class="custom-list-group" style="width: 75%;">
+                    {% for movie in recommendations %}
+                        <a href="{% url 'reviews:movie_review_list' movie.pk %}">
+                            <li class="list-group-item pl-0 d-flex" style="border: none;">
+                                <img id="moviePoster" src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="80px" class="mr-4">
+                                <span id="movieTitle" class="text-dark">{{ movie.title }}</span>
+                            </li>
+                        </a>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
