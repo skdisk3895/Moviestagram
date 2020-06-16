@@ -7,10 +7,10 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-7 mr-3">
+        <div class="col-8">
             <div>
                 {% for review in reviews %}
-                    <div class="card mb-4" style="width: 600px;">
+                    <div class="card mb-4">
                         <div class="card-header" style="background-color: white;">
                             <div class="d-flex">
                                 <i class="fas fa-user-circle mr-3" style="font-size: 25px;"></i>
@@ -72,6 +72,7 @@
                             </div>
                             <!-- <hr class="mb-0 mt-3"> -->
                         </div>
+                        <hr class="mb-0">
                         <form class="comment-form input-group align-items-end" action="{% url 'reviews:comment_create' review.movie.pk review.pk %}" method="POST" style="height: 50px;">
                             {% csrf_token %}
                             <input type="text" id="opinion{{ review.pk }}" class="opinion form-control mb-1" name="opinion" placeholder="댓글달기" aria-label="Recipient's username" style="border: none; ">
@@ -83,9 +84,15 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-4 fixed-top" style="top: 100px; left: 65%; z-index: 1;">
+            <div class="d-flex mb-5">
+                <i class="fas fa-user-circle mr-3" style="font-size: 55px;"></i>
+                <div class="mt-2">
+                    <strong style="font-size: 17px;">{{ request.user }}</strong>
+                </div>
+            </div>
             <div>
-                <h1>Movie Area</p>
+                <strong style="opacity: 0.8;">회원님을 위한 추천 영화</strong>
             </div>
         </div>
     </div>

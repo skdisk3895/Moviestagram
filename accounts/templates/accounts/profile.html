@@ -41,7 +41,18 @@
                 <div>
                     <div class="d-flex">
                         <span>게시물 <strong>{{ user.my_reviews.count }}</strong></span>
-                        <span class="ml-5">관심있는 영화 <strong>{{ user.like_movies.count }}</strong></span>
+                        <a data-toggle="modal" href="#likeMovies">
+                            <span class="ml-5 text-dark">관심있는 영화 <strong>{{ user.like_movies.count }}</strong></span>
+                        </a>
+                        <div id="likeMovies" class="modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                {% for movie in user.like_movie.all %}
+                                    <p>{{ movie }}</p>
+                                {% endfor %}
+                              </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,34 +98,35 @@
                                         </div>
                                       </div>
                                       <div class="col-md-5" style="border-left: 0.5px solid lightgray;">
-                                            <div class="card-body pb-0">
-                                                <div d-flex>
-                                                  <strong style="font-size: 13px;">{{ review.author }}</strong>
-                                                  <div class="float-right">
-                                                    {% if request.user == review.author %}
-                                                      <a data-toggle="modal" href="#reviewUDList{{ review.pk }}">
-                                                        <i class="fas fa-ellipsis-v mr-2 text-dark"></i>
-                                                      </a>
-                                                      <div class="modal modal-container modal" id="reviewUDList{{ review.pk }}" tabindex="-1" role="dialog">
-                                                        <div class="modal-dialog" style="top: 50px;">
-                                                          <div class="modal-content">
-                                                            <ul class="list-group text-center">
-                                                                <form action="{% url 'reviews:movie_delete_review' movie.pk review.pk %}" method="POST" style="height: 50px; padding-top: 12px;">
-                                                                  {% csrf_token %}
-                                                                  <button class="btn btn-link text-dark text-decoration-none mt-0 pt-0">삭제하기</button>
-                                                                </form>
-                                                                <a class="text-decoration-none text-dark" href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">
-                                                                  <li class="list-group-item modal-list">수정하기</li>
-                                                                </a>
-                                                            </ul>
-                                                          </div>
-                                                        </div>
+                                        <div class="card-body pb-0">
+                                            <div class="d-flex">
+                                              <i class="fas fa-user-circle mr-3" style="font-size: 25px;"></i>
+                                              <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                              <div class="ml-auto">
+                                                {% if request.user == review.author %}
+                                                  <a data-toggle="modal2" href="#reviewUDList{{ review.pk }}">
+                                                    <i class="fas fa-ellipsis-v mr-2 text-dark"></i>
+                                                  </a>
+                                                  <div class="modal modal-container modal2" id="reviewUDList{{ review.pk }}" tabindex="-1" role="dialog">
+                                                    <div class="modal-dialog" style="top: 20%;">
+                                                      <div class="modal-content">
+                                                        <ul class="list-group text-center">
+                                                            <form action="{% url 'reviews:movie_delete_review' movie.pk review.pk %}" method="POST" style="height: 50px; padding-top: 12px;">
+                                                              {% csrf_token %}
+                                                              <button class="btn btn-link text-dark text-decoration-none mt-0 pt-0">삭제하기</button>
+                                                            </form>
+                                                            <a class="text-decoration-none text-dark" href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">
+                                                              <li class="list-group-item modal-list">수정하기</li>
+                                                            </a>
+                                                        </ul>
                                                       </div>
-                                                    {% endif %}
-                                                    <i class="fas fa-times" data-dismiss="modal" style="cursor: pointer;"></i>
+                                                    </div>
                                                   </div>
-                                                </div>
+                                                {% endif %}
+                                                  <i class="fas fa-times" data-dismiss="modal" style="cursor: pointer;"></i>
+                                              </div>
                                             </div>
+                                            </div> 
                                             <hr style="width: 100%;">
                                             <div class="card-body pt-1" style="height: 300px; overflow-y: scroll;">
                                                 <div class="d-flex mb-4">
@@ -149,19 +161,12 @@
                                                             </div>
                                                             <div class="ml-auto">
                                                                 {% if comment.author == user %}
-                                                                    <a data-toggle="modal" href="#commentOption{{ comment.pk }}">
+                                                                    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown">
                                                                         <i class="fas fa-ellipsis-v mr-2 text-dark" data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" class="js-comment-delete-button"></i>
                                                                     </a>
-                                                                    <div class="modal modal-container modal" id="commentOption{{ comment.pk }}" tabindex="-1" role="dialog">
-                                                                        <div class="modal-dialog" style="top: 20%;">
-                                                                          <div class="modal-content">
-                                                                            <ul class="list-group text-center">
-                                                                                <a class="text-decoration-none text-dark" href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">
-                                                                                  <li class="js-comment-delete-button list-group-item modal-list" data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" style="cursor: pointer;">삭제하기</li>
-                                                                                </a>
-                                                                            </ul>
-                                                                          </div>
-                                                                        </div>
+                                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                                        <p class="js-comment-delete-button dropdown-item text-center my-0" data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" style="cursor: pointer;">삭제하기</p>
+                                                                        <p class="dropdown-item text-center my-0" style="cursor: pointer;">취소</p>
                                                                     </div>
                                                                 {% endif %}
                                                                 {% if user in comment.like_users.all %}

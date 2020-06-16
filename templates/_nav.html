@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{% static 'css/nav.css' %}">
 {% endblock %}
 
-<nav class="navbar navbar-light bg-default custom-nav" style="height: 55px;">
+<nav class="navbar navbar-light bg-default custom-nav">
     <a class="navbar-brand" href="{% url 'home:home' %}">
       <i class="fab fa-instagram title-logo"></i>
       <strong class="title">Moviestagram</strong>
@@ -22,7 +22,7 @@
         <a class="nav-link pr-3 dropdown-toggle" data-display="static" data-toggle="dropdown" href="#">
           <i class="far fa-heart menu-list"></i>
         </a>
-        <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px;">
+        <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px; z-index: 2;">
           <ul class="list-group">
             {% for movie in request.user.like_movies.all %}
               <li id="movieTitle{{ movie.pk }}" class="list-group-item">
