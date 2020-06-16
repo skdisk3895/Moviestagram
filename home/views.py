@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
-from django.db.models import Count
+from django.db.models import Count, Q
 from movies.models import Movie
 
 @require_GET
@@ -15,16 +15,19 @@ def home(request):
     if genres_count_order.count() > 4:
         for genre in genres_count_order[:3]:
             recommendation_genre += [genre.get('genres')]    
-        flag = 1
-        while len(recommendations) <5 and flag:
-            for r_genre in recommendation_genre:
-                if len(recommendations) >= 5:
-                    flag = 0
-                    break
-                recommendation_movie = Movie.objects.filter(genres=r_genre).annotate(like_count=Count('like_users')).order_by('-like_count')[:1]
-                recommendations += recommendation_movie
-    else:
-        recommendations = Movie.objects.annotate(like_count=Count('like_users')).order_by('-like_count')[:5]
+        recommendation_movies = Movie.objects.filter(Q(genres=recommendation_genre[0])|Q(genres=recommendation_genre[1])|Q(genres=recommendation_genre[2])).annotate(like_count=Count('like_users')).order_by('-like_count')
+        for recom_movie in recommendation_movies:
+            if len(recommendations) >= 5:
+                break
+            if recom_movie not in request.user.like_movies.all():
+                recommendations += [recom_movie]
+    else:       
+        recommendation_movies = Movie.objects.annotate(like_count=Count('like_users')).order_by('-like_count')
+        for recom_movie in recommendation_movies:
+            if len(recommendations) >= 5:
+                break
+            if recom_movie not in request.user.like_movies.all():
+                recommendations += [recom_movie]
     print(recommendations)
         
     reviews = request.user.like_movie_reviews.order_by('-created_at')
