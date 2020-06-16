@@ -52,7 +52,7 @@
                                       <a href="{% url 'reviews:movie_review_list' movie.pk %}">
                                         <li class="list-group-item">
                                             <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
-                                            <span>{{ movie.title }}</span>
+                                            <span class="text-dark">{{ movie.title }}</span>
                                         </li>
                                       </a>
                                     {% endfor %}
@@ -227,7 +227,6 @@
       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
       <script> // 리뷰 좋아요 기능 비동기 구현
           const buttons = document.querySelectorAll('.js-like-button')
-  
           buttons.forEach(function(button) {
               button.addEventListener('click', function(event) {
                   const moviePk = event.target.dataset.movie_pk

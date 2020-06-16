@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout, get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -28,6 +29,9 @@ def login(request):
         if form.is_valid():
             auth_login(request, form.get_user())
             return redirect(request.GET.get('next') or 'home:home')
+        else:
+            messages.error(request, '아이디 또는 비밀번호가 틀렸습니다.')
+            return redirect('accounts:login')
     else:
         form = AuthenticationForm()
     context = {
@@ -52,6 +56,8 @@ def profile(request, username):
     }
     return render(request, 'accounts/profile.html', context)
 
+@login_required
+@require_http_methods(['GET', 'POST'])
 def update(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
@@ -59,6 +65,9 @@ def update(request):
             form.save()
             username = request.user.username
             return redirect('accounts:profile', username)
+        else:
+            messages.error(request, '비밀번호가 다릅니다.')
+            return redirect('accounts:update')
     else:
         form = PasswordChangeForm(request.POST)
     context = {
