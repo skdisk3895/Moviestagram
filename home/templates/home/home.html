@@ -106,6 +106,12 @@
             </div>
             <div>
                 <strong style="opacity: 0.8;">회원님을 위한 추천 영화</strong>
+                {% for movie in recommendations %}
+              <li id="movieTitle{{ movie.pk }}" class="list-group-item">
+                <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px" class="mr-4">
+                <span><a href={% url 'reviews:movie_review_list' movie.pk %}>#{{ movie.title }}</a></span>
+              </li>
+            {% endfor %}
             </div>
         </div>
     </div>
