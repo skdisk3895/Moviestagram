@@ -25,7 +25,7 @@
         <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px;">
           <ul class="list-group">
             {% for movie in request.user.like_movies.all %}
-              <li id="movieTitle{{ movie.pk }}" class="list-group-item" aria-disabled="true">
+              <li id="movieTitle{{ movie.pk }}" class="list-group-item">
                 <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
                 <span>{{ movie.title }}</span>
                 <div class="float-right mt-3">

@@ -6,7 +6,9 @@ from django.views.decorators.http import require_GET
 @login_required
 def home(request):
     movies = request.user.like_movies.values('title')
+    reviews = request.user.like_movie_reviews.order_by('-created_at')
     context = {
         'movies': movies,
+        'reviews': reviews,
     }
     return render(request, 'home/home.html', context)

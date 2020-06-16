@@ -1,11 +1,85 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block body %}
     <div class="row">
-        <div class="col-8">
+        <div class="col-7 mr-3">
             <div>
-                {% for movie in movies.all %}
-                    <p>{{ movie.title }}</p>
+                {% for review in reviews %}
+                    <div class="card mb-4" style="width: 600px;">
+                        <div class="card-header" style="background-color: white;">
+                            <div class="d-flex">
+                                <i class="fas fa-user-circle mr-3" style="font-size: 25px;"></i>
+                                <strong style="font-size: 14px;">{{ review.author }}</strong>
+                            </div>
+                        </div>
+                        <img src="{{ review.review_images.first.image_files.url }}" width="100%" height="100%">
+                        <div class="card-body pb-0">
+                            <div>
+                              {% if user in review.like_users.all %}
+                                  <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button fas fa-heart" style="color:red;font-size: 25px; cursor: pointer;"></i>
+                              {% else %}
+                                  <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:black;font-size: 25px; cursor: pointer;"></i>
+                              {% endif %}
+                                  <i data-review_pk="{{ review.pk }}" class="js-comment-button far fa-comment mx-2" style="font-size: 25px; cursor: pointer;"></i>
+                            </div>
+                        </div>
+                        <div class="card-body pt-0" style="height: 300px; overflow-y: scroll;">
+                            <div class="d-flex mb-4">
+                                <div class="mr-3 mt-2">
+                                    <i class="fas fa-user-circle" style="font-size: 25px;"></i>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                    <span style="font-size: 14px;">{{ review.content }}</span>
+                                    <br>
+                                    <span style="font-size: 14px; opacity: 0.5;">{{ review.created_at }}</span>
+                                </div>
+                            </div>
+                            <div id="commentList{{ review.pk }}">
+                                {% for comment in review.review_comments.all %}
+                                  <div id="comment{{ comment.pk }}">
+                                      <div class="d-flex">
+                                          <div class="mr-3 mt-2">
+                                              <i class="fas fa-user-circle" style="font-size: 25px;"></i>
+                                          </div>
+                                          <div>
+                                              <p class="mb-0">
+                                                  <div style="font-size: 14px;">
+                                                      <strong>{{ comment.author }}</strong> 
+                                                      <span>{{ comment.opinion }}</span>
+                                                  </div>
+                                                  <div class="d-flex" style="font-size: 14px;">
+                                                      <span style="opacity: 0.5;">{{ comment.created_at }}</span>
+                                                      <span class="ml-1" style="font-size: 14px; opacity: 0.5;">좋아요 <strong id="commentLikeCount{{ comment.pk }}">{{ comment.like_users.all|length }}</strong>개</span>
+                                                  </div>
+                                              </p>
+                                          </div>
+                                          <div class="ml-auto">
+                                              {% if user in comment.like_users.all %}
+                                                  <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" class="js-comment-like-button fas fa-heart" style="color:red;font-size: 15px; cursor: pointer;"></i>
+                                              {% else %}
+                                                  <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" class="js-comment-like-button far fa-heart" style="color:black;font-size: 15px; cursor: pointer;"></i>
+                                              {% endif %}
+                                          </div>
+                                      </div>
+                                  </div>
+                              {% endfor %}
+                            </div>
+                            <!-- <hr class="mb-0 mt-3"> -->
+                        </div>
+                        <form class="comment-form input-group align-items-end" action="{% url 'reviews:comment_create' review.movie.pk review.pk %}" method="POST" style="height: 50px;">
+                            {% csrf_token %}
+                            <input type="text" id="opinion{{ review.pk }}" class="opinion form-control mb-1" name="opinion" placeholder="댓글달기" aria-label="Recipient's username" style="border: none; ">
+                            <div class="input-group-append">
+                                <button class="btn btn-default" style="margin-bottom: 5px; color: skyblue;">게시</button>
+                            </div>
+                        </form>
+                    </div>
                 {% endfor %}
             </div>
         </div>

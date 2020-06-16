@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_POST, require_http_methods 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.db import transaction
 from movies.models import Movie
 from .models import Review, Comment, Image, Feed
@@ -12,9 +12,11 @@ from .forms import ReviewForm, CommentForm, ImageFormSet
 def movie_review_list(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     reviews = movie.movie_reviews.all()
+    form = CommentForm()
     context = {
         'reviews': reviews,
         'movie': movie,
+        'form': form,
     }
     return render(request, 'reviews/review_list.html', context)
 
@@ -123,10 +125,12 @@ def comment_create(request, movie_pk, review_pk):
 @login_required
 def comment_delete(request, movie_pk, review_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
-    comment.delete()
-    data = {
-    }
-    return JsonResponse(data)
+    if request.user == comment.author:
+        comment.delete()
+        data = {
+        }
+        return JsonResponse(data)
+    return HttpResponse(status=401)
 
 @require_GET
 @login_required
@@ -153,15 +157,15 @@ def movie_like(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     reviews = movie.movie_reviews.all()
     if movie.like_users.filter(pk=user.pk).exists():
-        movie.like_users.remove(user)
         for review in reviews:
-            Feed.object.filter(user__pk=user.pk, review__pk=review.pk).delete()
+            user.like_movie_reviews.remove(review)
+        movie.like_users.remove(user)
         is_liked = False
     else:
-        movie.like_users.add(user)
         for review in reviews:
-            feed_instance = Feed(user=user, review=review)
-            feed_instance.save()
+            if review.author == request.user: continue
+            user.like_movie_reviews.add(review)
+        movie.like_users.add(user)
         is_liked = True
 
     data = {
