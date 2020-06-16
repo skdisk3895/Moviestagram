@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/review_list.css' %}">
+{% endblock %}
 
 {% block body %}
     <div style="margin-bottom: 30px;">
@@ -79,7 +84,7 @@
                                                           <ul class="list-group text-center">
                                                               <form action="{% url 'reviews:movie_delete_review' movie.pk review.pk %}" method="POST" style="height: 50px; padding-top: 12px;">
                                                                 {% csrf_token %}
-                                                                <button class="btn btn-link text-dark text-decoration-none mt-0 pt-0">삭제하기</button>
+                                                                <button class="btn btn-link text-dark text-decoration-none mt-0 pt-0" data-dismiss="modal">삭제하기</button>
                                                               </form>
                                                               <a class="text-decoration-none text-dark" href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">
                                                                 <li class="list-group-item modal-list">수정하기</li>
@@ -127,19 +132,12 @@
                                                             </div>
                                                             <div class="ml-auto">
                                                                 {% if comment.author == user %}
-                                                                    <a data-toggle="modal" href="#commentOption{{ comment.pk }}">
+                                                                    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown">
                                                                         <i class="fas fa-ellipsis-v mr-2 text-dark" data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" class="js-comment-delete-button"></i>
                                                                     </a>
-                                                                    <div class="modal modal-container modal" id="commentOption{{ comment.pk }}" tabindex="-1" role="dialog">
-                                                                        <div class="modal-dialog modal-dialog-centered">
-                                                                          <div class="modal-content">
-                                                                            <ul class="list-group text-center">
-                                                                                <a class="text-decoration-none text-dark" href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">
-                                                                                  <li class="js-comment-delete-button list-group-item modal-list" data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" style="cursor: pointer;">삭제하기</li>
-                                                                                </a>
-                                                                            </ul>
-                                                                          </div>
-                                                                        </div>
+                                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                                        <p class="js-comment-delete-button dropdown-item text-center my-0" data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" data-comment_pk="{{ comment.pk }}" style="cursor: pointer;">삭제하기</p>
+                                                                        <p class="dropdown-item text-center my-0" style="cursor: pointer;">취소</p>
                                                                     </div>
                                                                 {% endif %}
                                                                 {% if user in comment.like_users.all %}
@@ -250,17 +248,12 @@
                                                     </p>
                                                 </div>
                                                 <div class="ml-auto">
-                                                    <a data-toggle="modal" href="#commentOption${ comment.comment_pk }">
+                                                    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown">
                                                         <i class="fas fa-ellipsis-v mr-2 text-dark" data-movie_pk="${ comment.movie_pk }" data-review_pk="${ comment.review_pk }" data-comment_pk="${ comment.comment_pk }" class="js-comment-delete-button"></i>
                                                     </a>
-                                                    <div class="modal modal-container modal" id="commentOption${ comment.comment_pk }" tabindex="-1" role="dialog">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                            <ul class="list-group text-center">
-                                                                <li class="js-comment-delete-button list-group-item modal-list" data-movie_pk="${ comment.movie_pk }" data-review_pk="${ comment.review_pk }" data-comment_pk="${ comment.comment_pk }" style="cursor: pointer;">삭제하기</li>
-                                                            </ul>
-                                                            </div>
-                                                        </div>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <p class="js-comment-delete-button dropdown-item text-center my-0" data-movie_pk="${ comment.movie_pk }" data-review_pk="${ comment.review_pk }" data-comment_pk="${ comment.comment_pk }" style="cursor: pointer;">삭제하기</p>
+                                                        <p class="dropdown-item text-center my-0" style="cursor: pointer;">취소</p>
                                                     </div>
                                                     <i data-movie_pk="${ comment.movie_pk }" data-review_pk="${ comment.review_pk }" data-comment_pk="${ comment.comment_pk }" class="js-comment-like-button far fa-heart" style="color:black;font-size: 15px; cursor: pointer;"></i>
                                                 </div>

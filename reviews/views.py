@@ -4,7 +4,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from django.http import JsonResponse, HttpResponse
 from django.db import transaction
 from movies.models import Movie
-from .models import Review, Comment, Image, Feed
+from .models import Review, Comment, Image
 from .forms import ReviewForm, CommentForm, ImageFormSet
 
 @require_GET

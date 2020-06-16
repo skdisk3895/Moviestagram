@@ -14,10 +14,9 @@
     {% endblock %}
 </head>
 <body>
-    <div class="container">
+    <div class="container fixed-top" style="background-color: white;">
         {% include '_nav.html' %}
     </div>
-    <hr class="mt-0" style="width: 100%;">
     {% if messages %}
     {% for message in messages %}
         <div {% if message.tags %} class="alert alert-danger"{% endif %}>
@@ -25,7 +24,7 @@
         </div>
     {% endfor %}
     {% endif %}
-    <div class="container mt-5">
+    <div class="container" style="margin-top: 100px;">
         {% block body %}
         {% endblock %}
     </div>
