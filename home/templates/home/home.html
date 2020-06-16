@@ -86,8 +86,21 @@
         </div>
         <div class="col-4 fixed-top" style="top: 100px; left: 65%; z-index: 1;">
             <div class="d-flex mb-5">
-                <i class="fas fa-user-circle mr-3" style="font-size: 55px;"></i>
-                <div class="mt-2">
+                <div class="fa-stack fa-lg">
+                    {% if request.user.my_reviews.count < 5 %}
+                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
+                        <i class="fa-stack-2x font-weight-bold" style="color: gray;">{{ request.user.my_reviews.count }}</i>
+                    {% endif %}
+                    {% if request.user.my_reviews.count >= 5 and request.user.my_reviews.count < 10 %}
+                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
+                        <i class="fa-stack-1x font-weight-bold" style="color: gold;">{{ request.user.my_reviews.count }}</i>
+                    {% endif %}
+                    {% if request.user.my_reviews.count >= 10 %}
+                        <i class="far fa-circle fa-stack-2x" style="color: slategray;"></i>
+                        <i class="fa-stack-1x font-weight-bold" style="color: springgreen;">{{ request.user.my_reviews.count }}</i>
+                    {% endif %}
+                </div>
+                <div class="ml-2 mt-2">
                     <strong style="font-size: 17px;">{{ request.user }}</strong>
                 </div>
             </div>
