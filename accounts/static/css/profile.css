@@ -49,3 +49,11 @@
 .modal-list {
     border-bottom: 1px solid lightgray;
 }
+
+.list-group-item {
+    cursor: pointer;
+}
+
+.list-group-item:hover {
+    background-color: rgb(241, 241, 241);
+}
