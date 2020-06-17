@@ -129,7 +129,9 @@
                                                     {% endif %}
                                                 </div>
                                               <div class="ml-2">
-                                                <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                                <a href="{% url 'accounts:profile' review.author %}">
+                                                    <strong class="text-dark" style="font-size: 14px;">{{ review.author }}</strong>
+                                                </a>
                                               </div>
                                               <div class="ml-auto">
                                                 {% if request.user == review.author %}
@@ -171,7 +173,9 @@
                                                         {% endif %}
                                                     </div>
                                                     <div class="ml-2">
-                                                        <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                                        <a href="{% url 'accounts:profile' review.author %}">
+                                                            <strong class="text-dark" style="font-size: 14px;">{{ review.author }}</strong>
+                                                        </a>
                                                         <span style="font-size: 14px;">{{ review.content }}</span>
                                                         <br>
                                                         <a href="{% url 'reviews:movie_review_list' movie.pk %}" style="font-size: 14px;">#{{ movie.title }}</a>
