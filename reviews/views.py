@@ -7,11 +7,29 @@ from movies.models import Movie
 from .models import Review, Comment, Image
 from .forms import ReviewForm, CommentForm, ImageFormSet
 
+import json
+import urllib.request
+
 @require_GET
 @login_required
 def movie_review_list(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
+    genres = movie.genres.all()
     reviews = movie.movie_reviews.all()
+    client_id = "C6LNcmNSIQIEwWVSi6V4"
+    client_secret = "k0SlcrKOPe"
+    encText = urllib.parse.quote(movie.title)
+    url = "https://openapi.naver.com/v1/search/movie?query=" + encText
+    movie_api_request = urllib.request.Request(url)
+    movie_api_request.add_header("X-Naver-Client-Id",client_id)
+    movie_api_request.add_header("X-Naver-Client-Secret",client_secret)
+    response = urllib.request.urlopen(movie_api_request)
+    rescode = response.getcode()
+    if(rescode==200):
+        response_body = response.read()
+        result = json.loads(response_body.decode('utf-8'))
+        items = result.get('items')
+        # print(items[0])
     score_cnt = movie.movie_reviews.count()
     score_sum = 0
     for review in reviews:
@@ -25,7 +43,12 @@ def movie_review_list(request, movie_pk):
         'reviews': reviews,
         'movie': movie,
         'form': form,
-        'avg_score': avg_score
+        'avg_score': avg_score,
+        'genres': genres,
+        'subtitle': items[0]['subtitle'],
+        'date': items[0]['pubDate'],
+        'director': items[0]['director'][:-1],
+        'actor': items[0]['actor'][:-1],
     }
     return render(request, 'reviews/review_list.html', context)
 

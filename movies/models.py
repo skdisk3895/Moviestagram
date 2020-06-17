@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
-import requests
-import config
+import requests, config
 
 class Genre(models.Model):
     name = models.CharField(max_length=200)

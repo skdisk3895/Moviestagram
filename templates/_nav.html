@@ -24,10 +24,14 @@
         <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px;">
           <ul class="list-group">
             {% for movie in request.user.like_movies.all %}
-              <li id="movieTitle{{ movie.pk }}" class="list-group-item">
-                <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
-                <span>{{ movie.title }}</span>
-                <div class="float-right mt-3">
+              <li id="movieTitle{{ movie.pk }}" class="list-group-item d-flex">
+                <div class="col-2">
+                  <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
+                </div>
+                <div class="col-6 ml-2">
+                  <span>{{ movie.title }}</span>
+                </div>
+                <div class="col-4">
                   <button data-movie_pk="{{ movie.pk }}" class="movieLikeCancelButton btn text-white" style="font-size: 10px; background-color: rgb(253, 219, 225);">좋아요 취소</a>
                 </div>
               </li>
