@@ -65,10 +65,12 @@ def movie_update_review(request, movie_pk, review_pk):
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=review)
         image_formset = ImageFormSet(request.POST, request.FILES, instance=review)
+        rating = request.POST.get('star-input')
         if form.is_valid() and image_formset.is_valid():
             review = form.save(commit=False)
             review.author = request.user
             review.movie = movie
+            review.score = rating
             with transaction.atomic():
                 review.save()
                 image_formset.instance = review
