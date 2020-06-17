@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 import requests
+import config
 
 class Genre(models.Model):
     name = models.CharField(max_length=200)
@@ -24,8 +25,9 @@ class Movie(models.Model):
     def movie_search(cls, title, page):
         print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
         for n in range(page):
+            api_key = config.API_KEY
             movies = requests.get(
-                f'https://api.themoviedb.org/3/search/movie?api_key=f9cad3d60c9f4660d0f5186548616cf1&query='+ title
+                f'https://api.themoviedb.org/3/search/movie?api_key=' + api_key + '&query='+ title
             ).json().get('results')
             # print(movies)
             for movie in movies:      
