@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import Review, Image, Comment
 
 admin.site.register(Image)
-admin.site.register(Comment)
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
@@ -11,3 +10,8 @@ class ReviewAdmin(admin.ModelAdmin):
 
     def movie_title(self, obj):
         return obj.movie.title
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['opinion', 'author']
+    list_display_links = ['opinion', 'author']

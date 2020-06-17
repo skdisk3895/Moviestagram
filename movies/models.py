@@ -27,7 +27,7 @@ class Movie(models.Model):
         for n in range(page):
             api_key = config.API_KEY
             movies = requests.get(
-                f'https://api.themoviedb.org/3/search/movie?api_key=' + api_key + '&query='+ title
+                f'https://api.themoviedb.org/3/search/movie?api_key=' + api_key + '&language=ko-KR&query='+ title
             ).json().get('results')
             # print(movies)
             for movie in movies:      
