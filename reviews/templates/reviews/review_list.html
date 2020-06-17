@@ -129,7 +129,9 @@
                                                         {% endif %}
                                                     </div>
                                                   <div class="ml-2">
-                                                      <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                                      <a href="{% url 'accounts:profile' review.author %}">
+                                                        <strong class="text-dark" style="font-size: 14px;">{{ review.author }}</strong>
+                                                      </a>
                                                       <span style="font-size: 14px;">{{ review.content }}</span>
                                                       <br>
                                                       <a href="{% url 'reviews:movie_review_list' movie.pk %}" style="font-size: 14px;">#{{ movie.title }}</a>
@@ -175,7 +177,9 @@
                                                             <div class="ml-2">
                                                                 <p class="mb-0">
                                                                     <div style="font-size: 14px;">
-                                                                        <strong>{{ comment.author }}</strong> 
+                                                                        <a href="{% url 'accounts:profile' comment.author %}">
+                                                                            <strong class="text-dark">{{ comment.author }}</strong> 
+                                                                        </a>
                                                                         <span>{{ comment.opinion }}</span>
                                                                     </div>
                                                                     <div class="d-flex" style="font-size: 14px;">
