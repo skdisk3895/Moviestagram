@@ -47,6 +47,9 @@ def movie_create_review(request, movie_pk):
                 review.save()
                 image_formset.instance = review
                 image_formset.save()
+                for user in movie.like_users.all():
+                    if user == request.user: continue
+                    user.like_movie_reviews.add(review)
                 return redirect('reviews:movie_review_list', movie.pk)
     else:
         form =ReviewForm()
