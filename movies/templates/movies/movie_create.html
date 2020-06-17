@@ -1,4 +1,10 @@
-<form action="{% url 'movies:movie_create' %}" method="POST">
-    {% csrf_token %}
-    <input id="max_searchbar_size" name="title" class="search-bar" type="text" placeholder="검색">
-  </form>
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block body %}
+    <form class="form-container mt-4" action="{% url 'movies:movie_create' %}" method="POST">
+        {% csrf_token %}
+        <input id="max_searchbar_size" name="title" class="search-bar" type="text" placeholder="검색">
+    </form>
+{% endblock %}

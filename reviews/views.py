@@ -7,7 +7,7 @@ from movies.models import Movie
 from .models import Review, Comment, Image
 from .forms import ReviewForm, CommentForm, ImageFormSet
 
-import json
+import json, config
 import urllib.request
 
 @require_GET
@@ -16,8 +16,8 @@ def movie_review_list(request, movie_pk):
     movie = get_object_or_404(Movie, pk=movie_pk)
     genres = movie.genres.all()
     reviews = movie.movie_reviews.all()
-    client_id = "C6LNcmNSIQIEwWVSi6V4"
-    client_secret = "k0SlcrKOPe"
+    client_id = config.CLIENT_ID
+    client_secret = config.NAVER_SECRET_KEY
     encText = urllib.parse.quote(movie.title)
     url = "https://openapi.naver.com/v1/search/movie?query=" + encText
     movie_api_request = urllib.request.Request(url)

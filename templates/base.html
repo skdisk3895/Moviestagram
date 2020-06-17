@@ -48,10 +48,13 @@
         const movieLikeCancelButtons = document.querySelectorAll('.movieLikeCancelButton')
         movieLikeCancelButtons.forEach(function (button) {
             button.addEventListener('click', function (event) {
+                // console.log(event)
                 const moviePk = event.target.dataset.movie_pk
                 const movie = document.querySelector(`#movieTitle${moviePk}`)
+                console.log(movie)
                 axios.get(`/reviews/${moviePk}/like/`)
                     .then(res => {
+                        console.log(res)
                         movie.style.display = 'none'
                     })
             })
