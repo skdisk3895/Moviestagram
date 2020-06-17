@@ -8,7 +8,7 @@
 {% block body %}
     <div class="row">
         <div class="col-8">
-            <div>
+            <div id="movieReviews">
                 {% for review in reviews|dictsortreversed:"created_at" %}
                     <div class="card mb-4">
                         <div class="card-header" style="background-color: white;">
@@ -31,7 +31,29 @@
                                 </div>
                             </div>
                         </div>
-                        <img src="{{ review.review_images.first.image_files.url }}" width="100%" height="100%">
+                        <div id="reviewImages{{ review.pk }}" class="carousel slide" data-ride="carousel" data-interval="false" style="height: 100%;">
+                            <div class="carousel-inner" style="height: 100%;">
+                                {% for image in review.review_images.all %}
+                                    {% if forloop.counter == 1 %}
+                                        <div class="carousel-item active" style="width: 100%; height: 500px;">
+                                            <img src="{{ image.image_files.url }}" class="card-image" width="100%" height="528px">
+                                        </div>
+                                    {% else %}
+                                        <div class="carousel-item" style="width: 100%; height: 500px;">
+                                            <img src="{{ image.image_files.url }}" class="card-image" width="100%" height="528px">
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <a class="carousel-control-prev" href="#reviewImages{{ review.pk }}" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#reviewImages{{ review.pk }}" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                         <div class="card-body pb-0">
                             <div>
                               {% if user in review.like_users.all %}
@@ -45,7 +67,7 @@
                         <div class="card-body py-0">
                             {% if review.like_users.count %}
                                 <a data-toggle="modal" href="#likeUsers{{ review.pk }}">
-                                    <span class="text-dark"><b>{{ review.like_users.count }}명</b>이 좋아합니다.</span>
+                                    <span class="text-dark"><b id="reviewLikeCount{{ review.pk }}">{{ review.like_users.count }}명</b>이 좋아합니다.</span>
                                 </a>
                                 <div class="modal modal-container" id="likeUsers{{ review.pk }}" tabindex="-1" role="dialog">
                                     <div class="modal-dialog" style="top: 20%;">
@@ -72,7 +94,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <span class="text-dark"><b id="reviewLikeCount{{ review.pk }}">{{ review.like_users.count }}명</b>이 좋아합니다.</span>
+                                <span class="text-dark"><b id="reviewLikeCount{{ review.pk }}">{{ review.like_users.all|length }}명</b>이 좋아합니다.</span>
                             {% endif %}
                         </div>
                         <div class="card-body pt-0" style="height: 300px; overflow-y: scroll;">
@@ -205,7 +227,7 @@
             </div>
             <div>
                 <strong style="opacity: 0.8;">회원님을 위한 추천 영화</strong>
-                <ul class="custom-list-group" style="width: 75%;">
+                <ul class="custom-list-group mt-1" style="width: 75%;">
                     {% for movie in recommendations %}
                         <a href="{% url 'reviews:movie_review_list' movie.pk %}">
                             <li class="list-group-item pl-0 d-flex" style="border: none;">
@@ -229,7 +251,9 @@
                 const reviewPk = event.target.dataset.review_pk
                 axios.get(`/reviews/${moviePk}/${reviewPk}/like/`)
                 .then(res => {
+                    console.log(res.data)
                     const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
+                    console.log(reviewLikeCount)
                     if (res.data.is_liked) {
                         event.target.style.color = "red"
                         event.target.className = "js-like-button fas fa-heart"
@@ -347,23 +371,19 @@
             })
         })
     </script>
-    <script>
-        // 영화 좋아요
-        const movieLikeButton = document.querySelector('#movieLikeButton')
-        movieLikeButton.addEventListener('click', function (event) {
-            const moviePk = event.target.dataset.movie_pk
-            axios.get(`/reviews/${moviePk}/like/`)
-                .then(res => {
-                    // const movieLikeCount = document.querySelector(`#movieLikeCount${commentPk}`)
-                    if (res.data.is_liked) {
-                        event.target.style.color = "red"
-                        event.target.className = "fas fa-heart"
-                    } else {
-                        event.target.style.color = "black"
-                        event.target.className = "far fa-heart"
-                    }
-                    // movieLikeCount.innerText = "좋아요 " + res.data.like_count + "개"
-                })
-        })
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(window).scroll(function () {
+                // 현재 위치의 높이
+                //var curHeight = $(window).height() + $(window).scrollTop();
+                var curHeight = $(window).scrollTop();
+                // 문서의 높이
+                var docHeight = $(document).height();
+                // 어느 정도 조건이 만족하면 내용 생성
+                if (curHeight > docHeight - 800) {
+                    $('<h1>Infinity Scroll</h1>').appendTo('body');
+                }
+            });
+        });  
     </script>
 {% endblock %}

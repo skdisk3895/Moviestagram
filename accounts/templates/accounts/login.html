@@ -14,7 +14,7 @@
         <form class="form-container mt-4" method="POST">
             {% csrf_token %}
             {% bootstrap_form form layout='inline' %}
-            <button class="btn text-white button-signup mt-3">로그인</button>
+            <button class="btn text-white button-signup mt-3 font-weight-bold">로그인</button>
             <div class="mt-4 text-center">
                 <span>계정이 없으신가요?</span>
                 <a class="font-weight-bold" href="{% url 'accounts:signup' %}">가입하기</a>
