@@ -35,7 +35,7 @@
     <hr>
     <div class="mt-4 container">
       <div class="row">
-          {% for review in movie.movie_reviews.all %}
+          {% for review in movie.movie_reviews.all|dictsortreversed:"created_at" %}
               <div class="col-4 mb-3" style="height: 212px;">
                   <a data-toggle="modal" href="#reviewDetail{{ review.pk }}">
                       <img src="{{ review.review_images.first.image_files.url }}" width="100%" height="100%">
@@ -100,7 +100,7 @@
                                                           <ul class="list-group text-center">
                                                               <form action="{% url 'reviews:movie_delete_review' movie.pk review.pk %}" method="POST" style="height: 50px; padding-top: 12px;">
                                                                 {% csrf_token %}
-                                                                <button class="btn btn-link text-dark text-decoration-none mt-0 pt-0" data-dismiss="modal">삭제하기</button>
+                                                                <button class="btn btn-link text-dark text-decoration-none mt-0 pt-0">삭제하기</button>
                                                               </form>
                                                               <a class="text-decoration-none text-dark" href="{% url 'reviews:movie_update_review' movie.pk review.pk %}">
                                                                 <li class="list-group-item modal-list">수정하기</li>
@@ -160,7 +160,7 @@
                                                   </div>
                                               </div>
                                               <div id="commentList{{ review.pk }}">
-                                                  {% for comment in review.review_comments.all %}
+                                                  {% for comment in review.review_comments.all|dictsortreversed:"created_at" %}
                                                     <div id="comment{{ comment.pk }}">
                                                         <div class="d-flex">
                                                             <div>
