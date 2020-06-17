@@ -78,7 +78,7 @@
     <hr>
     <div class="mt-4 container">
         <div class="row">
-            {% for review in user.my_reviews.all %}
+            {% for review in user.my_reviews.all|dictsortreversed:"created_at" %}
             {% with movie=review.movie %}
                 <div class="col-4 mb-3" style="height: 212px;">
                     <a data-toggle="modal" href="#reviewDetail{{ review.pk }}">
@@ -135,10 +135,10 @@
                                               </div>
                                               <div class="ml-auto">
                                                 {% if request.user == review.author %}
-                                                  <a data-toggle="modal2" href="#reviewUDList{{ review.pk }}">
+                                                  <a data-toggle="modal" href="#reviewUDList{{ review.pk }}">
                                                     <i class="fas fa-ellipsis-v mr-2 text-dark"></i>
                                                   </a>
-                                                  <div class="modal modal-container modal2" id="reviewUDList{{ review.pk }}" tabindex="-1" role="dialog">
+                                                  <div class="modal modal-container" id="reviewUDList{{ review.pk }}" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog" style="top: 20%;">
                                                       <div class="modal-content">
                                                         <ul class="list-group text-center">
@@ -154,7 +154,7 @@
                                                     </div>
                                                   </div>
                                                 {% endif %}
-                                                  <i class="fas fa-times" data-dismiss="modal" style="cursor: pointer;"></i>
+                                                <i class="fas fa-times" data-dismiss="modal" style="cursor: pointer;"></i>
                                               </div>
                                             </div>
                                             </div> 
@@ -204,7 +204,7 @@
                                                     </div>
                                                 </div>
                                                 <div id="commentList{{ review.pk }}">
-                                                    {% for comment in review.review_comments.all %}
+                                                    {% for comment in review.review_comments.all|dictsortreversed:"created_at" %}
                                                     <div id="comment{{ comment.pk }}">
                                                         <div class="d-flex">
                                                             <div>
