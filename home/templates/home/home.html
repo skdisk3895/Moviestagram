@@ -13,29 +13,106 @@
                     <div class="card mb-4">
                         <div class="card-header" style="background-color: white;">
                             <div class="d-flex">
-                                <i class="fas fa-user-circle mr-3" style="font-size: 25px;"></i>
-                                <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                <div>
+                                    {% if review.author.my_reviews.count < 5 %}
+                                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                    {% endif %}
+                                    {% if review.author.my_reviews.count >= 5 and review.author.my_reviews.count < 10 %}
+                                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                    {% endif %}
+                                    {% if review.author.my_reviews.count >= 10 %}
+                                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                    {% endif %}
+                                </div>
+                                <div class="ml-2">
+                                    <a href="{% url 'accounts:profile' review.author %}">
+                                        <strong class="text-dark" style="font-size: 14px;">{{ review.author }}</strong>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <img src="{{ review.review_images.first.image_files.url }}" width="100%" height="100%">
                         <div class="card-body pb-0">
                             <div>
                               {% if user in review.like_users.all %}
-                                  <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button fas fa-heart" style="color:red;font-size: 25px; cursor: pointer;"></i>
+                                  <i data-movie_pk="{{ review.movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button fas fa-heart" style="color:red;font-size: 25px; cursor: pointer;"></i>
                               {% else %}
-                                  <i data-movie_pk="{{ movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:black;font-size: 25px; cursor: pointer;"></i>
+                                  <i data-movie_pk="{{ review.movie.pk }}" data-review_pk="{{ review.pk }}" class="js-like-button far fa-heart" style="color:black;font-size: 25px; cursor: pointer;"></i>
                               {% endif %}
                                   <i data-review_pk="{{ review.pk }}" class="js-comment-button far fa-comment mx-2" style="font-size: 25px; cursor: pointer;"></i>
                             </div>
                         </div>
+                        <div class="card-body py-0">
+                            {% if review.like_users.count %}
+                                <a data-toggle="modal" href="#likeUsers{{ review.pk }}">
+                                    <span class="text-dark"><b>{{ review.like_users.count }}명</b>이 좋아합니다.</span>
+                                </a>
+                                <div class="modal modal-container" id="likeUsers{{ review.pk }}" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" style="top: 20%;">
+                                    <div class="modal-content">
+                                        <ul class="list-group">
+                                            {% for user in review.like_users.all %}
+                                            <a href="{% url 'accounts:profile' user.username %}">
+                                                <li class="list-group-item">
+                                                    {% if user.my_reviews.count < 5 %}
+                                                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if user.my_reviews.count >= 5 and user.my_reviews.count < 10 %}
+                                                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if user.my_reviews.count >= 10 %}
+                                                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                                    {% endif %}
+                                                    <span class="text-dark">{{ user.username }}</span>
+                                                </li>
+                                            </a>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <span class="text-dark"><b id="reviewLikeCount{{ review.pk }}">{{ review.like_users.count }}명</b>이 좋아합니다.</span>
+                            {% endif %}
+                        </div>
                         <div class="card-body pt-0" style="height: 300px; overflow-y: scroll;">
                             <div class="d-flex mb-4">
-                                <div class="mr-3 mt-2">
-                                    <i class="fas fa-user-circle" style="font-size: 25px;"></i>
-                                </div>
                                 <div>
+                                    {% if review.author.my_reviews.count < 5 %}
+                                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                    {% endif %}
+                                    {% if review.author.my_reviews.count >= 5 and review.author.my_reviews.count < 10 %}
+                                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                    {% endif %}
+                                    {% if review.author.my_reviews.count >= 10 %}
+                                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                    {% endif %}
+                                </div>
+                                <div class="ml-2">
                                     <strong style="font-size: 14px;">{{ review.author }}</strong>
                                     <span style="font-size: 14px;">{{ review.content }}</span>
+                                    <br>
+                                    <a href="{% url 'reviews:movie_review_list' review.movie.pk %}" style="font-size: 14px;">#{{ review.movie.title }}</a>
+                                    <br>
+                                    <span style="font-size: 14px;">
+                                        {% with score=review.score %}
+                                            {% if score == 1 %}
+                                                <i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                            {% endif %}
+                                            {% if score == 2 %}
+                                                <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                            {% endif %}
+                                            {% if score == 3 %}
+                                                <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                            {% endif %}
+                                            {% if score == 4 %}
+                                                <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i>
+                                            {% endif %}
+                                            {% if score == 5 %}
+                                                <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </span>
                                     <br>
                                     <span style="font-size: 14px; opacity: 0.5;">{{ review.created_at }}</span>
                                 </div>
@@ -44,10 +121,18 @@
                                 {% for comment in review.review_comments.all %}
                                   <div id="comment{{ comment.pk }}">
                                       <div class="d-flex">
-                                          <div class="mr-3 mt-2">
-                                              <i class="fas fa-user-circle" style="font-size: 25px;"></i>
-                                          </div>
                                           <div>
+                                            {% if comment.author.my_reviews.count < 5 %}
+                                                <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                            {% endif %}
+                                            {% if comment.author.my_reviews.count >= 5 and comment.author.my_reviews.count < 10 %}
+                                                <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                            {% endif %}
+                                            {% if comment.author.my_reviews.count >= 10 %}
+                                                <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                            {% endif %}
+                                          </div>
+                                          <div class="ml-2">
                                               <p class="mb-0">
                                                   <div style="font-size: 14px;">
                                                       <strong>{{ comment.author }}</strong> 
@@ -88,17 +173,25 @@
             <div class="d-flex mb-5">
                 <div>
                     {% if request.user.my_reviews.count < 5 %}
-                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="55px">
+                        <a href="{% url 'accounts:profile' request.user %}">
+                            <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="55px">
+                        </a>
                     {% endif %}
                     {% if request.user.my_reviews.count >= 5 and request.user.my_reviews.count < 10 %}
-                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="55px">
+                        <a href="{% url 'accounts:profile' request.user %}">
+                            <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="55px">
+                        </a>
                     {% endif %}
                     {% if request.user.my_reviews.count >= 10 %}
-                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="55px">
+                        <a href="{% url 'accounts:profile' request.user %}">
+                            <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="55px">
+                        </a>
                     {% endif %}
                 </div>
                 <div class="ml-2 mt-3">
-                    <strong style="font-size: 17px;">{{ request.user }}</strong>
+                    <a href="{% url 'accounts:profile' request.user %}">
+                        <strong class="text-dark" style="font-size: 17px;">{{ request.user }}</strong>
+                    </a>
                 </div>
             </div>
             <div>
@@ -116,4 +209,39 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block script %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script> // 리뷰 좋아요 기능 비동기 구현
+        const buttons = document.querySelectorAll('.js-like-button')
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                axios.get(`/reviews/${moviePk}/${reviewPk}/like/`)
+                    .then(res => {
+                        console.log(res)
+                        const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
+                        if (res.data.is_liked) {
+                            event.target.style.color = "red"
+                            event.target.className = "js-like-button fas fa-heart"
+                        } else {
+                            event.target.style.color = "black"
+                            event.target.className = "js-like-button far fa-heart"
+                        }
+                        reviewLikeCount.innerText = res.data.like_count + "명"
+                    })
+            })
+        })
+    </script>
+    <script>
+        // 댓글 아이콘 커서 위치 이동 구현
+        const commentButtons = document.querySelectorAll(`.js-comment-button`)
+        commentButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const reviewPk = event.target.dataset.review_pk
+                document.querySelector(`#opinion${reviewPk}`).focus()
+            })
+        })
+    </script>
 {% endblock %}

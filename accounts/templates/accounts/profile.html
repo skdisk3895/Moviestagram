@@ -10,13 +10,13 @@
     <div>
         <div class="d-flex">
             <div>
-                {% if request.user.my_reviews.count < 5 %}
+                {% if user.my_reviews.count < 5 %}
                     <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="150px" style="margin-right: 80px;">
                 {% endif %}
-                {% if request.user.my_reviews.count >= 5 and request.user.my_reviews.count < 10 %}
+                {% if user.my_reviews.count >= 5 and user.my_reviews.count < 10 %}
                     <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="150px" style="margin-right: 80px;">
                 {% endif %}
-                {% if request.user.my_reviews.count >= 10 %}
+                {% if user.my_reviews.count >= 10 %}
                     <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="150px" style="margin-right: 80px;">
                 {% endif %}
             </div>
@@ -24,26 +24,28 @@
                 <div>
                     <div class="d-flex">
                         <p class="username">{{ user.username }}</p>
-                        <a data-toggle="modal" class="text-dark mt-1" href="#optionModal">
-                            <i class="far fa-circle btn-option mt-2" style="font-size: 25px;"></i>
-                        </a>
-                        <div class="modal modal-container" id="optionModal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <ul class="list-group text-center">
-                                    <a class="text-decoration-none text-dark" href="{% url 'accounts:update' %}">
-                                        <li class="list-group-item modal-list">비밀번호 변경</li>
-                                    </a>
-                                    <a class="text-decoration-none text-dark" href="{% url 'accounts:logout' %}">
-                                        <li class="list-group-item modal-list">로그아웃</li>
-                                    </a>
-                                    <a class="text-decoration-none text-dark" data-dismiss="modal" href="">
-                                        <li class="list-group-item">취소</li>
-                                    </a>
-                                </ul>
-                              </div>
+                        {% if request.user == user %}
+                            <a data-toggle="modal" class="text-dark mt-1" href="#optionModal">
+                                <i class="far fa-circle btn-option mt-2" style="font-size: 25px;"></i>
+                            </a>
+                            <div class="modal modal-container" id="optionModal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <ul class="list-group text-center">
+                                        <a class="text-decoration-none text-dark" href="{% url 'accounts:update' %}">
+                                            <li class="list-group-item modal-list">비밀번호 변경</li>
+                                        </a>
+                                        <a class="text-decoration-none text-dark" href="{% url 'accounts:logout' %}">
+                                            <li class="list-group-item modal-list">로그아웃</li>
+                                        </a>
+                                        <a class="text-decoration-none text-dark" data-dismiss="modal" href="">
+                                            <li class="list-group-item">취소</li>
+                                        </a>
+                                    </ul>
+                                </div>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div>
@@ -56,7 +58,7 @@
                             <div class="modal-dialog" role="document" style="top: 10%;">
                               <div class="modal-content">
                                 <ul class="list-group">
-                                    {% for movie in request.user.like_movies.all %}
+                                    {% for movie in user.like_movies.all %}
                                       <a href="{% url 'reviews:movie_review_list' movie.pk %}">
                                         <li class="list-group-item">
                                             <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
@@ -115,8 +117,20 @@
                                       <div class="col-md-5" style="border-left: 0.5px solid lightgray;">
                                         <div class="card-body pb-0">
                                             <div class="d-flex">
-                                              <i class="fas fa-user-circle mr-3" style="font-size: 25px;"></i>
-                                              <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                                <div>
+                                                    {% if user.my_reviews.count < 5 %}
+                                                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if user.my_reviews.count >= 5 and user.my_reviews.count < 10 %}
+                                                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if user.my_reviews.count >= 10 %}
+                                                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                                    {% endif %}
+                                                </div>
+                                              <div class="ml-2">
+                                                <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                              </div>
                                               <div class="ml-auto">
                                                 {% if request.user == review.author %}
                                                   <a data-toggle="modal2" href="#reviewUDList{{ review.pk }}">
@@ -145,12 +159,42 @@
                                             <hr style="width: 100%;">
                                             <div class="card-body pt-1" style="height: 300px; overflow-y: scroll;">
                                                 <div class="d-flex mb-4">
-                                                    <div class="mr-3 mt-2">
-                                                        <i class="fas fa-user-circle" style="font-size: 25px;"></i>
-                                                    </div>
                                                     <div>
-                                                        <strong>{{ review.author }}</strong>
-                                                        <span>{{ review.content }}</span>
+                                                        {% if user.my_reviews.count < 5 %}
+                                                            <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                                        {% endif %}
+                                                        {% if user.my_reviews.count >= 5 and user.my_reviews.count < 10 %}
+                                                            <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                                        {% endif %}
+                                                        {% if user.my_reviews.count >= 10 %}
+                                                            <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="ml-2">
+                                                        <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                                        <span style="font-size: 14px;">{{ review.content }}</span>
+                                                        <br>
+                                                        <a href="{% url 'reviews:movie_review_list' movie.pk %}" style="font-size: 14px;">#{{ movie.title }}</a>
+                                                        <br>
+                                                        <span style="font-size: 14px;">
+                                                            {% with score=review.score %}
+                                                                {% if score == 1 %}
+                                                                    <i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                                                {% endif %}
+                                                                {% if score == 2 %}
+                                                                    <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                                                {% endif %}
+                                                                {% if score == 3 %}
+                                                                    <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+                                                                {% endif %}
+                                                                {% if score == 4 %}
+                                                                    <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="far fa-star"></i>
+                                                                {% endif %}
+                                                                {% if score == 5 %}
+                                                                    <i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i><i class="fas fa-star" style="color: pink;"></i>
+                                                                {% endif %}
+                                                            {% endwith %}
+                                                        </span>
                                                         <br>
                                                         <span style="font-size: 14px; opacity: 0.5;">{{ review.created_at }}</span>
                                                     </div>
@@ -159,13 +203,23 @@
                                                     {% for comment in review.review_comments.all %}
                                                     <div id="comment{{ comment.pk }}">
                                                         <div class="d-flex">
-                                                            <div class="mr-3 mt-2">
-                                                                <i class="fas fa-user-circle" style="font-size: 25px;"></i>
-                                                            </div>
                                                             <div>
+                                                                {% if comment.author.my_reviews.count < 5 %}
+                                                                    <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                                                {% endif %}
+                                                                {% if comment.author.my_reviews.count >= 5 and comment.author.my_reviews.count < 10 %}
+                                                                    <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                                                {% endif %}
+                                                                {% if comment.author.my_reviews.count >= 10 %}
+                                                                    <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="ml-2">
                                                                 <p class="mb-0">
                                                                     <div style="font-size: 14px;">
-                                                                        <strong>{{ comment.author }}</strong> 
+                                                                        <a href="{% url 'accounts:profile' comment.author %}">
+                                                                            <strong class="text-dark">{{ comment.author }}</strong> 
+                                                                        </a>
                                                                         <span>{{ comment.opinion }}</span>
                                                                     </div>
                                                                     <div class="d-flex" style="font-size: 14px;">
@@ -233,170 +287,174 @@
     {% block script %}
     
       <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-      <script> // 리뷰 좋아요 기능 비동기 구현
-          const buttons = document.querySelectorAll('.js-like-button')
-          buttons.forEach(function(button) {
-              button.addEventListener('click', function(event) {
-                  const moviePk = event.target.dataset.movie_pk
-                  const reviewPk = event.target.dataset.review_pk
-                  axios.get(`/reviews/${moviePk}/${reviewPk}/like/`)
-                  .then(res => {
-                      const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
-                      if (res.data.is_liked) {
-                          event.target.style.color = "red"
-                          event.target.className = "js-like-button fas fa-heart"
-                      } else {
-                          event.target.style.color = "black"
-                          event.target.className = "js-like-button far fa-heart"
-                      }
-                      reviewLikeCount.innerText = res.data.like_count
-                  })
-              })
-          })
-          
-          // 댓글 아이콘 커서 위치 이동 구현
-          const commentButtons = document.querySelectorAll(`.js-comment-button`)
-          commentButtons.forEach(function(button) {
-              button.addEventListener('click', function(event) {
-                  const reviewPk = event.target.dataset.review_pk
-                  document.querySelector(`#opinion${reviewPk}`).focus()
-          })
-          })
-      
-      // 댓글 생성 기능 비동기 구현
-          const commentForms = document.querySelectorAll('.comment-form')
-          commentForms.forEach(function(form) {
-              form.addEventListener('submit', function(event) {
-                  event.preventDefault()
-                  
-                  const data = new FormData(event.target)
-  
-                  axios.post(event.target.action, data)
-                  .then(function(response){
-                      const comment = response.data
-                      const commentList = document.querySelector(
-                          `#commentList${comment.review_pk}`)
-                      // const newComment = `<p>
-                      //                     <div>
-                      //                     <strong>${comment.author}</strong> 
-                      //                     <span>${comment.opinion}</span>
-                      //                     </div>
-                      //                     <div>
-                      //                     <i data-movie_pk="${comment.movie_pk}" data-review_pk="${comment.review_pk}" data-comment_pk="${comment.comment_pk}" class="js-comment-like-button far fa-heart" style="color:gray;font-size: 15px;"></i>
-                      //                     <span>${comment.date}</span>
-                      //                     <span style="font-size: 15px" id="commentLikeCount${comment.comment_pk}">좋아요 ${comment.like_users}개</span>
-                      //                         <a href="/reviews/${comment.movie_pk}/${comment.review_pk}/${comment.comment_pk}/delete/">댓글 삭제</a>
-                      //                     </p>`
-                      const newComment = `<div id="comment${comment.comment_pk}">
-                                              <div class="d-flex">
-                                                  <div class="mr-3 mt-2">
-                                                      <i class="fas fa-user-circle" style="font-size: 25px;"></i>
-                                                  </div>
-                                                  <div>
-                                                      <p class="mb-0">
-                                                          <div style="font-size: 14px;">
-                                                              <strong>${comment.author}</strong> 
-                                                              <span>${comment.opinion}</span>
-                                                          </div>
-                                                          <div class="d-flex" style="font-size: 14px;">
-                                                              <span style="opacity: 0.5;">${comment.date}</span>
-                                                              <span style="font-size: 15px; opacity: 0.5;" id="commentLikeCount{{ comment.pk }}">좋아요 ${comment.like_users}개</span>
-                                                              <div class="float-right">
-                                                                  <span data-movie_pk="${comment.movie_pk}" data-review_pk="${comment.review_pk}" data-comment_pk="${comment.comment_pk}" class="js-comment-delete-button" style="cursor: pointer;">댓글 삭제</span>
-                                                                  <i data-movie_pk="${comment.movie_pk}" data-review_pk="${comment.review_pk}" data-comment_pk="${comment.comment_pk}" class="js-comment-like-button far fa-heart" style="color:black;font-size: 15px; cursor: pointer;"></i>
-                                                              </div>
-                                                          </div>
-                                                      </p>
-                                                  </div>
-                                              </div>
-                                          </div>`
-                      commentList.insertAdjacentHTML('beforeEnd', newComment)
-                      event.target.reset()
-                      console.log(event)
-                      //댓글 삭제 기능 비동기 구현
-          const commentDeleteButtons = document.querySelectorAll('.js-comment-delete-button')
-          commentDeleteButtons.forEach(function(button) {
-              button.addEventListener('click', function(event) {
-                  event.preventDefault()
-                  const moviePk = event.target.dataset.movie_pk
-                  const reviewPk = event.target.dataset.review_pk
-                  const commentPk = event.target.dataset.comment_pk
-                  const comment = document.querySelector(`#comment${commentPk}`)
-                  console.log(comment)
-                  axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/delete/`)
-                  .then(
-                      comment.style.display = "none"
-                      )
-                  })
-              })
-      
-      // 댓글 좋아요 기능 비동기 구현
-          const commentLikeButtons = document.querySelectorAll('.js-comment-like-button')
-          
-          commentLikeButtons.forEach(function(button) {
-              button.addEventListener('click', function(event) {
-                  const moviePk = event.target.dataset.movie_pk
-                  const reviewPk = event.target.dataset.review_pk
-                  const commentPk = event.target.dataset.comment_pk
-                  axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/like/`)
-                  .then(res => {
-                      const commentLikeCount = document.querySelector(`#commentLikeCount${commentPk}`)
-                      if (res.data.is_liked) {
-                          event.target.style.color = "red"
-                          event.target.className = "js-comment-like-button fas fa-heart"
-                      } else {
-                          event.target.style.color = "black"
-                          event.target.className = "js-comment-like-button far fa-heart"
-                      }
-                      commentLikeCount.innerText = res.data.like_count
-                  })
-              })
-          })
-                  })
-  
-              })
-          })
-      
-      //댓글 삭제 기능 비동기 구현
-          const commentDeleteButtons = document.querySelectorAll('.js-comment-delete-button')
-          commentDeleteButtons.forEach(function(button) {
-              button.addEventListener('click', function(event) {
-                  event.preventDefault()
-                  const moviePk = event.target.dataset.movie_pk
-                  const reviewPk = event.target.dataset.review_pk
-                  const commentPk = event.target.dataset.comment_pk
-                  const comment = document.querySelector(`#comment${commentPk}`)
-                  console.log(comment)
-                  axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/delete/`)
-                  .then(
-                      comment.style.display = "none"
-                      )
-                  })
-              })
-      
-      // 댓글 좋아요 기능 비동기 구현
-          const commentLikeButtons = document.querySelectorAll('.js-comment-like-button')
-          
-          commentLikeButtons.forEach(function(button) {
-              button.addEventListener('click', function(event) {
-                  const moviePk = event.target.dataset.movie_pk
-                  const reviewPk = event.target.dataset.review_pk
-                  const commentPk = event.target.dataset.comment_pk
-                  axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/like/`)
-                  .then(res => {
-                      const commentLikeCount = document.querySelector(`#commentLikeCount${commentPk}`)
-                      if (res.data.is_liked) {
-                          event.target.style.color = "red"
-                          event.target.className = "js-comment-like-button fas fa-heart"
-                      } else {
-                          event.target.style.color = "black"
-                          event.target.className = "js-comment-like-button far fa-heart"
-                      }
-                      commentLikeCount.innerText = res.data.like_count
-                  })
-              })
-          })
-          </script>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script> // 리뷰 좋아요 기능 비동기 구현
+        const buttons = document.querySelectorAll('.js-like-button')
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                axios.get(`/reviews/${moviePk}/${reviewPk}/like/`)
+                .then(res => {
+                    const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
+                    if (res.data.is_liked) {
+                        event.target.style.color = "red"
+                        event.target.className = "js-like-button fas fa-heart"
+                    } else {
+                        event.target.style.color = "black"
+                        event.target.className = "js-like-button far fa-heart"
+                    }
+                    reviewLikeCount.innerText = res.data.like_count
+                })
+            })
+        })
+    </script>
+    <script>
+        // 댓글 아이콘 커서 위치 이동 구현
+        const commentButtons = document.querySelectorAll(`.js-comment-button`)
+        commentButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const reviewPk = event.target.dataset.review_pk
+                document.querySelector(`#opinion${reviewPk}`).focus()
+        })
+        })
+    
+        // 댓글 생성 기능 비동기 구현
+        const commentForms = document.querySelectorAll('.comment-form')
+        commentForms.forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault()
+                const data = new FormData(event.target)
+
+                axios.post(event.target.action, data)
+                .then(function(res){
+                    const comment = res.data
+                    const commentList = document.querySelector(`#commentList${comment.review_pk}`)
+                    const newComment = `<div id="comment${comment.comment_pk}">
+                                            <div class="d-flex">
+                                                <div>
+                                                    {% if comment.author.my_reviews.count < 5 %}
+                                                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if comment.author.my_reviews.count >= 5 and comment.author.my_reviews.count < 10 %}
+                                                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if comment.author.my_reviews.count >= 10 %}
+                                                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    <p class="mb-0">
+                                                        <div style="font-size: 14px;">
+                                                            <strong>${ comment.author }</strong> 
+                                                            <span>${ comment.opinion }</span>
+                                                        </div>
+                                                        <div class="d-flex" style="font-size: 14px;">
+                                                            <span style="opacity: 0.5;">${ comment.date }</span>
+                                                            <span class="ml-1" style="font-size: 14px; opacity: 0.5;">좋아요 <strong id="commentLikeCount${ comment.comment_pk }">${ comment.like_users }</strong>개</span>
+                                                        </div>
+                                                    </p>
+                                                </div>
+                                                <div class="ml-auto">
+                                                    <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown">
+                                                        <i class="fas fa-ellipsis-v mr-2 text-dark" data-movie_pk="${ comment.movie_pk }" data-review_pk="${ comment.review_pk }" data-comment_pk="${ comment.comment_pk }" class="js-comment-delete-button"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <p class="js-comment-delete-button dropdown-item text-center my-0" data-movie_pk="${ comment.movie_pk }" data-review_pk="${ comment.review_pk }" data-comment_pk="${ comment.comment_pk }" style="cursor: pointer;">삭제하기</p>
+                                                        <p class="dropdown-item text-center my-0" style="cursor: pointer;">취소</p>
+                                                    </div>
+                                                    <i data-movie_pk="${ comment.movie_pk }" data-review_pk="${ comment.review_pk }" data-comment_pk="${ comment.comment_pk }" class="js-comment-like-button far fa-heart" style="color:black;font-size: 15px; cursor: pointer;"></i>
+                                                </div>
+                                            </div>
+                                        </div>`
+                    commentList.insertAdjacentHTML('beforeEnd', newComment)
+                    event.target.reset()
+        // //댓글 삭제 기능 비동기 구현
+        // const commentDeleteButtons = document.querySelectorAll('.js-comment-delete-button')
+        // commentDeleteButtons.forEach(function(button) {
+        //     button.addEventListener('click', function(event) {
+        //         event.preventDefault()
+        //         const moviePk = event.target.dataset.movie_pk
+        //         const reviewPk = event.target.dataset.review_pk
+        //         const commentPk = event.target.dataset.comment_pk
+        //         const comment = document.querySelector(`#comment${commentPk}`)
+        //         console.log(comment)
+        //         axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/delete/`)
+        //         .then(
+        //             comment.style.display = "none"
+        //             )
+        //         })
+        //     })
+    
+        // // 댓글 좋아요 기능 비동기 구현
+        // const commentLikeButtons = document.querySelectorAll('.js-comment-like-button')
+        // console.log(commentLikeButtons)
+        // commentLikeButtons.forEach(function(button) {
+        //     button.addEventListener('click', function(event) {
+        //         console.log(event)
+        //         const moviePk = event.target.dataset.movie_pk
+        //         const reviewPk = event.target.dataset.review_pk
+        //         const commentPk = event.target.dataset.comment_pk
+        //         axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/like/`)
+        //         .then(res => {
+        //             const commentLikeCount = document.querySelector(`#commentLikeCount${commentPk}`)
+        //             if (res.data.is_liked) {
+        //                 event.target.style.color = "red"
+        //                 event.target.className = "js-comment-like-button fas fa-heart"
+        //             } else {
+        //                 event.target.style.color = "black"
+        //                 event.target.className = "js-comment-like-button far fa-heart"
+        //             }
+        //             commentLikeCount.innerText = res.data.like.count
+        //         })
+        //     })
+        // })
+                })
+
+            })
+        })
+    </script>
+    <script>
+        const commentDeleteButtons = document.querySelectorAll('.js-comment-delete-button')
+        commentDeleteButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault()
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                const commentPk = event.target.dataset.comment_pk
+                const comment = document.querySelector(`#comment${commentPk}`)
+                console.log(comment)
+                axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/delete/`)
+                .then(
+                    comment.style.display = "none"
+                    )
+                })
+            })
+    </script>
+    <script>
+        // 댓글 좋아요 기능 비동기 구현
+        const commentLikeButtons = document.querySelectorAll('.js-comment-like-button')
+        commentLikeButtons.forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                console.log(event)
+                const moviePk = event.target.dataset.movie_pk
+                const reviewPk = event.target.dataset.review_pk
+                const commentPk = event.target.dataset.comment_pk
+                axios.get(`/reviews/${moviePk}/${reviewPk}/${commentPk}/like/`)
+                .then(res => {
+                    const commentLikeCount = document.querySelector(`#commentLikeCount${commentPk}`)
+                    if (res.data.is_liked) {
+                        event.target.style.color = "red"
+                        event.target.className = "js-comment-like-button fas fa-heart"
+                    } else {
+                        event.target.style.color = "black"
+                        event.target.className = "js-comment-like-button far fa-heart"
+                    }
+                    commentLikeCount.innerText = res.data.like_count
+                })
+            })
+        })
+    </script>
   
   {% endblock %}
   <!-- 
