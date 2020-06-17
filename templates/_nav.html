@@ -6,7 +6,6 @@
 
 <nav class="navbar navbar-light bg-default custom-nav">
     <a class="navbar-brand" href="{% url 'home:home' %}">
-      <i class="fab fa-instagram title-logo"></i>
       <strong class="title">Moviestagram</strong>
     </a>
     <form action="{% url 'movies:movie_list' %}">
@@ -29,7 +28,7 @@
                 <img src="https://image.tmdb.org/t/p/w92/{{ movie.poster_path }}" alt="" width="60px" height="60px">
                 <span>{{ movie.title }}</span>
                 <div class="float-right mt-3">
-                  <button data-movie_pk="{{ movie.pk }}" class="movieLikeCancelButton btn btn-danger" style="font-size: 10px;">좋아요 취소</a>
+                  <button data-movie_pk="{{ movie.pk }}" class="movieLikeCancelButton btn text-white" style="font-size: 10px; background-color: rgb(253, 219, 225);">좋아요 취소</a>
                 </div>
               </li>
             {% endfor %}

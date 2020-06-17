@@ -26,7 +26,3 @@ def movie_create(request):
         context = {}
         return render(request, 'movies/movie_create.html', context)
     
-    
-
-
-
