@@ -21,7 +21,11 @@ def movie_create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         Movie.movie_search(title, 1)
-        return redirect('home:home')
+        movies = Movie.objects.filter(title__icontains=title)
+        context = {
+            'movies': movies,
+        }
+        return render(request, 'movies/movie_list.html', context)
     else:
         context = {}
         return render(request, 'movies/movie_create.html', context)
