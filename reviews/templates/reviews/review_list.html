@@ -85,7 +85,9 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="ml-2">
-                                                    <strong style="font-size: 14px;">{{ review.author }}</strong>
+                                                    <a href="{% url 'accounts:profile' review.author %}">
+                                                        <strong class="text-dark" style="font-size: 14px;">{{ review.author }}</strong>
+                                                    </a>
                                                 </div>
                                                 <div class="ml-auto">
                                                   {% if request.user == review.author %}
@@ -246,7 +248,6 @@
                 const reviewPk = event.target.dataset.review_pk
                 axios.get(`/reviews/${moviePk}/${reviewPk}/like/`)
                 .then(res => {
-                    console.log(res)
                     const reviewLikeCount = document.querySelector(`#reviewLikeCount${reviewPk}`)
                     if (res.data.is_liked) {
                         event.target.style.color = "red"
@@ -281,11 +282,18 @@
                 .then(function(res){
                     const comment = res.data
                     const commentList = document.querySelector(`#commentList${comment.review_pk}`)
-                    console.log(event)
                     const newComment = `<div id="comment${comment.comment_pk}">
                                             <div class="d-flex">
-                                                <div class="mr-3 mt-2">
-                                                    <i class="fas fa-user-circle" style="font-size: 25px;"></i>
+                                                <div>
+                                                    {% if comment.author.my_reviews.count < 5 %}
+                                                        <img src="https://img.icons8.com/doodle/48/000000/plant-under-sun--v1.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if comment.author.my_reviews.count >= 5 and comment.author.my_reviews.count < 10 %}
+                                                        <img src="https://img.icons8.com/color/48/000000/flower-doodle.png"/ width="25px">
+                                                    {% endif %}
+                                                    {% if comment.author.my_reviews.count >= 10 %}
+                                                        <img src="https://img.icons8.com/dusk/64/000000/raspberry.png"/ width="25px">
+                                                    {% endif %}
                                                 </div>
                                                 <div>
                                                     <p class="mb-0">

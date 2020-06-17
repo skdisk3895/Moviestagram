@@ -28,7 +28,6 @@ def home(request):
                 break
             if recom_movie not in request.user.like_movies.all():
                 recommendations += [recom_movie]
-    print(recommendations)
         
     reviews = request.user.like_movie_reviews.order_by('-created_at')
     context = {
