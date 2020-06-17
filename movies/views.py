@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET, require_http_methods
 from .models import Movie
 
+
 @require_GET
 @login_required
 def movie_list(request):

@@ -1,12 +1,29 @@
 asgiref==3.2.7
 beautifulsoup4==4.9.1
+<<<<<<< HEAD
+=======
+certifi==2020.4.5.2
+chardet==3.0.4
+>>>>>>> 327d241c07cf1cad675f4039b3c44ef63a58d010
 Django==3.0.7
 django-appconf==1.0.4
 django-bootstrap4==2.0.1
 django-imagekit==4.0.2
+<<<<<<< HEAD
 pilkit==2.0
 Pillow==7.1.2
 pytz==2020.1
 six==1.15.0
 soupsieve==2.0.1
 sqlparse==0.3.1
+=======
+idna==2.9
+pilkit==2.0
+Pillow==7.1.2
+pytz==2020.1
+requests==2.23.0
+six==1.15.0
+soupsieve==2.0.1
+sqlparse==0.3.1
+urllib3==1.25.9
+>>>>>>> 327d241c07cf1cad675f4039b3c44ef63a58d010
