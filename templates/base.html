@@ -40,9 +40,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     {% bootstrap_javascript jquery='full' %}
     <script>
+        const likeMoviesButton = document.querySelector('#likeMoviesButton')
         $(document).ready(function() {
             $(".dropdown-toggle").dropdown();
         });
+
+        likeMoviesButton.addEventListener('click', function (event) {
+            console.log(likeMoviesIcon.className)
+            if(likeMoviesIcon.className == 'far fa-heart menu-list')
+                likeMoviesIcon.className = 'fas fa-heart menu-list'
+            else
+                likeMoviesIcon.className = 'far fa-heart menu-list'
+        })
     </script>
     <script>
         const movieLikeCancelButtons = document.querySelectorAll('.movieLikeCancelButton')

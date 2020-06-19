@@ -12,14 +12,37 @@
       <input id="max_searchbar_size" name="movieTitle" class="search-bar" type="text" placeholder="검색">
     </form>
     <ul class="nav justify-content-end">
-      <li class="nav-item">
-        <a class="nav-link pr-3" href="{% url 'home:home' %}">
-          <i class="fas fa-home menu-list"></i>
-        </a>
-      </li>
+      {% if request.path == '/' %}
+        <li class="nav-item">
+          <a class="nav-link pr-3" href="{% url 'home:home' %}">
+            <img src="https://img.icons8.com/material-rounded/24/000000/home.png"/>
+          </a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link pr-3" href="{% url 'home:home' %}">
+            <img src="https://img.icons8.com/material-outlined/24/000000/home--v2.png"/>
+          </a>
+        </li>
+      {% endif %}
+      {% if request.user.username == "admin" %}
+        {% if "movies/admin/create" in request.path %}
+          <li class="nav-item">
+            <a class="nav-link pr-3" href="{% url 'movies:movie_create' %}">
+              <img src="https://img.icons8.com/ios-filled/50/000000/add-database.png"/ width="24px">
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link pr-3" href="{% url 'movies:movie_create' %}">
+              <img src="https://img.icons8.com/ios/26/000000/add-database.png"/ width="24px">
+            </a>
+          </li>
+        {% endif %}
+      {% endif %}
       <li class="nav-item dropdown">
-        <a class="nav-link pr-3 dropdown-toggle" data-display="static" data-toggle="dropdown" href="#">
-          <i class="far fa-heart menu-list"></i>
+        <a id="likeMoviesButton" class="nav-link pr-3 dropdown-toggle" data-display="static" data-toggle="dropdown" href="#">
+          <i id="likeMoviesIcon" class="far fa-heart menu-list"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right py-0" style="width: 400px;">
           <ul class="list-group">
@@ -42,11 +65,19 @@
         </div>
       </li>
       {% if request.user.is_authenticated %}
-        <li class="nav-item">
+        {% if "accounts" in request.path and request.user.username in request.path %}
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:profile' request.user %}">
+                <i class="fas fa-user-circle user-icon" style="color: black;"></i>
+              </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'accounts:profile' request.user %}">
               <i class="fas fa-user-circle user-icon"></i>
             </a>
-        </li>
+          </li>
+        {% endif %}
       {% endif %} 
     </ul>
 </nav>
